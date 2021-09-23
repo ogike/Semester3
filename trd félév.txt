@@ -1,0 +1,92 @@
+Anal II ea
+	Toledo Rpdolfo
+	08:00
+	Kérdezni lehet bármikor teams chaten
+webprog
+	két beadandó (js + php)
+	csoportzh mindkettõbõl
+	évfzh mindkettõbõl
+	minden héten szorgalmik
+	liveshare dl
+	szorgalmik?:  	       bit.ly/web-ebr
+	github, órai kódokkal: bit.ly/zus-web
+
+algo 2 gyak 
+	14:00 kezdés
+	http://aszt.inf.elte.hu/~asvanyi/ad/ad2jegyzet
+	három hiányzás megengedett
+	2 ZH, 60-60 pontos
+	teams-en lehet keresni (vagy teams email is akár)
+	hetente lesznek kvízek
+	hasznos eszközök:
+		wolfram aplha: készülõdés közben ellenõrzésre
+		matchexchange: 
+	
+progtech ea
+	aszinkron
+	3db beadandó
+		dokumentációval
+		egy hét késés  -1 jegy, kettesnek meg kell lennie
+		ez alapján megajánlott gyakorlati jegy
+		hibátlanul mûködõ, jól letesztelt
+	honlap: swap.web.elte.hu
+	email: swap@inf.elte.hu
+	elõadás idejében teamsen
+	személyesen tanárt (?): Déli épület 2.2602
+	
+web ea
+	11:00
+	catalog.inf.elte.hu
+	követelmények canvason
+
+progtech gyak
+	12:15
+	beandandók canvason
+		feladatsorok: http://swap.web.elte.hu/?site=2021221_pt
+		doksihoz: UML szerkesztõvel diagram
+			gyakvez ajánlása: plantUML
+	felvételt lehet indítani
+	anyag: canvas,  http://swap.web.elte.hu/2020211_pt/gyak/
+
+cpp gyak
+	beadandó: cpp filehoz kell írni egy headert
+		9.3-as gcc
+		ubuntu-n defauét
+		1 hét lesz rá
+		védeni kell utána
+	azon kívül nem lesz számonkérés
+
+progtech gyak
+	3 beadandó
+	beadandó kiosztása canvasban
+
+progelm gyak
+	16:00 kezdés
+	minden óra elején 1db +/- Canvasen
+		3db feleletválasztós
+		Ha kettõ vagy több jó, az plusz
+		Követelmény: legalább 50% +
+	2db zh (közepén, végén)
+	felvétel indítható
+
+maya
+	19:30
+	lehetõség a full online
+	teams-en keresni
+	kéthetente valami canvasen...?
+	lesznek nem kötelezõ házik
+	beadandó
+		félév végén, vizsgaidõszak kezdetén határidõ
+	jelenlétet órai munka beadásával
+
+cpp ea
+	10:00 körül kezdõdik
+	beadandók
+		plágium ellenõrzés
+		majd kiteszik hogy milyen környezetben fogják tesztelni
+	ajánlott irodalo: 
+		Bjarne Stroustrup: A C++ programozási nyelv
+			minden is benne van, bonyolult
+		Scott Meyers: Hatékony C++
+			Sokkal olvasmányosabb
+			De nincs benne minden amit tanulunk
