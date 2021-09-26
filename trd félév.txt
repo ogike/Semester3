@@ -90,3 +90,4 @@ cpp ea
 		Scott Meyers: Hatékony C++
 			Sokkal olvasmányosabb
 			De nincs benne minden amit tanulunk
+	diák teams fileok között
