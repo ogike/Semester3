@@ -1,0 +1,1 @@
+Feladat: Vannak bankfiókok, amelyek számlákat kezelnek. Bankfiókon keresztül lehet számlára pénzt befizetni, illetve számlák között pénzt átvezetni.

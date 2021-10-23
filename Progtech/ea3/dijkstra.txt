@@ -1,0 +1,1 @@
+Feladat: Irányított, élsúlyozott gráfban adott startcsúcsból az egyes csúcsokba vezetõ legrövidebb utak keresése - Dijkstra algoritmus implementálása

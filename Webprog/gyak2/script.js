@@ -23,9 +23,9 @@ let tablazat = document.createElement('table')
 let headerSor = document.createElement('tr')
 
 header.forEach(element => {
-    let sor = document.createElement('th')
-    sor.innerHTML = element
-    headerSor.appendChild(sor)
+    let oszlop = document.createElement('th')
+    oszlop.innerHTML = element
+    headerSor.appendChild(oszlop)
 })
 
 tablazat.appendChild(headerSor)

@@ -1,0 +1,1 @@
+Feladat: Állítsuk elõ egy halmaz hatványhalmazát!
