@@ -246,14 +246,15 @@ div.dataset.dateOfBirth = "2000-12-12"
 
 //ESEMÉNYKEZELÉS ############################################
 {
-let myTextField  = document.createElement('input')
-myTextField.type = 'text'
-let myCheckBox   = document.createElement('input')
-myCheckBox.type  = 'checkBox'
-document.body.appendChild(myTextField)
-document.body.appendChild(myCheckBox)
-const button = document.createElement('button')
-button.innerText = 'test button'
+//példához változók
+    let myTextField  = document.createElement('input')
+    myTextField.type = 'text'
+    let myCheckBox   = document.createElement('input')
+    myCheckBox.type  = 'checkBox'
+    document.body.appendChild(myTextField)
+    document.body.appendChild(myCheckBox)
+    const button = document.createElement('button')
+    button.innerText = 'test button'
 
 //'input' nevű text mező kiolvasása
 let bekertNev = myTextField.value
@@ -268,8 +269,7 @@ button.addEventListener('click', onClick)
                                  //onClick: eseményt kezeLő függvényem
                                  //zárójel nélkül kell átadni!
 
-               //event: esemény objektum, benne van pl a kiváltó elem
-               //       (elhagyható)
+               //event: esemény objektum, benne van pl a kiváltó elem (elhagyható)
 function onClick(event) {
     event.target.innerText += ' x' //event.target: amire rákattintottunk
     let newP = document.createElement('p')
@@ -283,9 +283,40 @@ function onClick(event) {
 
 document.body.appendChild(button)
 
-//remove event listener
+//removing event listener:
     //button.removeEventListener('click', onClick)
 
+//alapértelmezett művelet megakadályozása:
+    //eseménykezelő függvényen belül: event.preventDefaulr()
+    //ezzel pl megakadályozható hogy egy link megnyíljon, stb
+
+//KEYBOARD INPUT PÉLDA
+let keyPressed = document.createElement('div')
+keyPressed.innerText = "Waiting for numbers..."
+document.body.appendChild(keyPressed)
+
+let keyInput = document.createElement('input')
+keyInput.type = 'text'
+document.body.appendChild(keyInput)
+
+keyInput.addEventListener('keydown', (event)=>{
+    let betu = event.key.toLowerCase() //event.key: lenyomott billenytű
+    keyPressed.innerText = `Key pressed: ` + betu
+
+    if(isNaN(parseInt(betu.key))) //ha amit lenyomtunk nem szám
+        event.preventDefault() 
+        //itt alap viselkedés amit megakadályozunk = key beírása a mezőbe
+
+    //note: 
+        //key = input amit kapunk
+        //code = ahol lenne fizikailag a billenytű (pl z helyett y)
+})
+
+//események rövid listája:
+    //click, mousemove, mousedown, mouseup, scroll
+    //keydown, keyup, keypress
+    //input: input mező értékének megváltoztatása
+    //submit: űrlap elküldése
 }
 
 }
@@ -338,4 +369,5 @@ let tablazat = document.querySelector('table')
 delegal(tablazat, 'tr', 'click', selectRow)
 
 
+//ÖTÖDIK GYAKORLAT: csoportZH
 }

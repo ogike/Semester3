@@ -113,6 +113,9 @@ function update(dt) {
         columns.shift() //az első oszlopot (teteje+alja) töröljük a tömb elejéről
         columns.shift()
     }
+
+    if(bird.y < 0 || bird.y > canvas.height)
+        gameState = 1
     
     columns.forEach(e => {if(isCollided(bird, e)) gameState = 1})
 
