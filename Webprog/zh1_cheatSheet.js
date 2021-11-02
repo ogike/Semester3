@@ -286,11 +286,20 @@ document.body.appendChild(button)
 //removing event listener:
     //button.removeEventListener('click', onClick)
 
+//események rövid listája:
+    //click, mousemove, mousedown, mouseup, scroll
+    //keydown, keyup, keypress
+    //input: input mező értékének megváltoztatása
+    //submit: űrlap elküldése
+
 //alapértelmezett művelet megakadályozása:
-    //eseménykezelő függvényen belül: event.preventDefaulr()
+    //eseménykezelő függvényen belül: event.preventDefault()
     //ezzel pl megakadályozható hogy egy link megnyíljon, stb
 
-//KEYBOARD INPUT PÉLDA
+}
+
+//KEYBOARD INPUT PÉLDA ######################################
+{
 let keyPressed = document.createElement('div')
 keyPressed.innerText = "Waiting for numbers..."
 document.body.appendChild(keyPressed)
@@ -303,20 +312,17 @@ keyInput.addEventListener('keydown', (event)=>{
     let betu = event.key.toLowerCase() //event.key: lenyomott billenytű
     keyPressed.innerText = `Key pressed: ` + betu
 
-    if(isNaN(parseInt(betu.key))) //ha amit lenyomtunk nem szám
-        event.preventDefault() 
+    if(isNaN(parseInt(betu)) && betu != "backspace"){ //ha amit lenyomtunk nem szám/backspace
+        console.log((betu))
+        event.preventDefault()
         //itt alap viselkedés amit megakadályozunk = key beírása a mezőbe
+    }
 
     //note: 
         //key = input amit kapunk
         //code = ahol lenne fizikailag a billenytű (pl z helyett y)
 })
 
-//események rövid listája:
-    //click, mousemove, mousedown, mouseup, scroll
-    //keydown, keyup, keypress
-    //input: input mező értékének megváltoztatása
-    //submit: űrlap elküldése
 }
 
 }
@@ -371,3 +377,28 @@ delegal(tablazat, 'tr', 'click', selectRow)
 
 //ÖTÖDIK GYAKORLAT: csoportZH
 }
+
+//##################################################################
+//ÖTÖDIK ELŐADÁS
+
+
+//##################################################################
+//HATODIK ELŐADÁS
+
+//CANVAS API ################################################
+
+//HTML elem: <canvas width="600" height="400"></canvas>
+
+//ezek mindig kellenek nekünk!
+const canvas = document.querySelector('canvas')
+const ctx = canvas.getContext('2d')
+
+//NOTE: canvas koordinátarendszere bal felül kezdődik (0,0)
+
+//következő rajzolás stílusának beállítása:
+ctx.fillStyle = 'blue'
+
+//Rajzolás alakzatokkal:
+ctx.fillText('bottom text', 5, 395)
+
+//Szöveg:

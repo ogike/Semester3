@@ -125,7 +125,28 @@ function update(dt) {
 
 document.addEventListener('keydown', (e)=>{
     bird.vy = -200
+
+    if(e.key == "r"){
+        //reset()
+    }
+
 })
+
+function reset(){
+    bird.x = 50
+    bird.x = 50
+    bird.y = canvas.height / 2
+    bird.height = 30
+    bird.width = 50
+    bird.vy = 0
+    bird.ay = 250
+
+    columns = []
+
+    gameState = 0
+    prevTime = performance.now()
+    requestAnimationFrame(gameLoop)
+}
 
 // Start
 gameLoop()
