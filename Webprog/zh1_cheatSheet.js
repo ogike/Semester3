@@ -351,7 +351,7 @@ function delegal(szulo, gyerek, mikor, mit){
 }
 
 //Delegál használatára példa: táblázat sorainak kijelölése
-function selectRow(event, closest){
+function selectRow(event, closest){ //closest: amire kattintunk?
     if(!event.target.matches('th')){ //ha nem a headerre kattintottunk
         closest.classList.toggle('selected')
 
@@ -384,6 +384,7 @@ delegal(tablazat, 'tr', 'click', selectRow)
 
 //##################################################################
 //HATODIK ELŐADÁS
+{
 
 //CANVAS API ################################################
 
@@ -402,3 +403,5 @@ ctx.fillStyle = 'blue'
 ctx.fillText('bottom text', 5, 395)
 
 //Szöveg:
+
+}
