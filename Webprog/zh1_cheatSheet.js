@@ -1,8 +1,15 @@
 /* Készítette: Tasi Zoltán (ogike)
- * Üres html-be beleillseztve is működnek a példák
+ * Üres html-be beleillesztve is működnek a példák
+ * Elvileg le kéne fednie az 1. évfolyamZH anyagát
+ *   (max űrlap validáció hiányzik)
  * Felelősséget nem vállalok
  */
 
+//putting the canvas at the beginning for later use
+const canv = document.createElement('canvas')
+canv.width = 600; canv.height = 400
+canv.style.border = '1px solid black'
+document.body.appendChild(canv)
 
 //##################################################################
 //ELSŐ GYAKORLAT (JS SYNTAX)
@@ -179,6 +186,7 @@ bekezdes.classList.add("myClass")
 bekezdes.classList.remove("redClass")
 bekezdes.classList.toggle("redClass")
 bekezdes.classList.toggle("redClass", bekezdes.style.fontSize > 10) //feltételes toggle
+bekezdes.classList.contains("myClass") //true
 
 }
 
@@ -380,13 +388,98 @@ delegal(tablazat, 'tr', 'click', selectRow)
 
 //##################################################################
 //ÖTÖDIK ELŐADÁS
+{
 
+//IDŐZÍTŐK ##################################################
+{
+
+function tick() {
+    console.log('5 seconds later');
+}
+
+//Egy adott függvény futtatása egyszer 5000 ms múlva
+const timer = setTimeout(tick, 5000)
+
+//Egy adott függvény futtatása 5000 ms-onként
+const intervalTimer = setInterval(tick, 5000)
+
+//időzítő törlése
+clearTimeout(timer)
+clearInterval(intervalTimer)
+
+//Újrarajzolás megvárása
+requestAnimationFrame(function (){
+    console.log("Ez már újrarajzolás után van.")
+})
+
+}
+
+//Hiányzó rész: Úrlap validáció
+
+//RANDOM HASZNOS DOLGOK #####################################
+{
+
+//kép előtöltése mem_kep-be majd cseréje:
+    // const mem_kep = document.createElement('img');
+    // mem_kep.src = 'korte.png';
+
+    // //ha szukseges a csere:
+    // const kep = document.querySelector('img');
+    // kep.src = mem_kep.src;
+
+//Táblázatokhoz hasznos tulajdonságok/metódusok:
+// Táblázatra:
+    // rows
+    // insertRow(index)
+    // deleteRow(index)
+// Sorra:
+    // rowIndex
+    // cells
+    // insertCell(index)
+    // deleteCell(index)
+// Cellára:
+    // cellIndex
+
+//visszaadja hogy az átadottt td hol van
+function xyKoord(td) {
+    const x =  td.cellIndex
+    const tr = td.parentNode
+    const y =  tr.sectionRowIndex
+    return {x, y}
+}
+
+//String művelet példák
+
+'piros alma'.charAt(2)                    // "r"
+'piros alma'.charCodeAt(2)                // 114
+'piros alma'.indexOf('alma')              // 6
+          //.lastIndexOf: hátulról keres
+'piros alma'.localeCompare('piros körte') // -1
+'piros alma'.replace('piros', 'sárga')    // "sárga alma"
+'piros alma'.substr(2, 3)                 // "ros"
+'piros alma'.split(' ')                   // ["piros","alma"]
+'piros alma'.startsWith('piros')          // true
+'piros alma'.padStart(15)                 // "     piros alma"
+'     piros alma'.trim()                  // "piros alma"
+               //.trimStart() és .trimEnd()
+'piros alma'.toUpperCase()                // "PIROS ALMA"
+'piros '.repeat(2)                       // "piros piros "
+//string.search(regexp)
+//string.match(regexp)
+
+isNaN(parseInt('2164'));     //a szöveg szám-e?
+(126.4567).toFixed(2)       // "123.46", kerekítés
+
+}
+
+}
 
 //##################################################################
 //HATODIK ELŐADÁS
 {
 
 //CANVAS API ################################################
+{
 
 //HTML elem: <canvas width="600" height="400"></canvas>
 
@@ -398,10 +491,87 @@ const ctx = canvas.getContext('2d')
 
 //következő rajzolás stílusának beállítása:
 ctx.fillStyle = 'blue'
-
-//Rajzolás alakzatokkal:
-ctx.fillText('bottom text', 5, 395)
+    //lineWidth
+    //fillStyle
+    //lineCap: vonalak vége
+    //lineJoin: vonalak illesztése
+    //áttetszőség: globalAlpha
 
 //Szöveg:
+ctx.fillText('bottom text', 5, 395)
+
+//Rajzolás alakzatokkal:
+ctx.fillRect(5, 5, 20, 100);    //teli téglalap
+ctx.strokeRect(30, 5, 20, 100); //téglalap körvonal
+
+
+ctx.beginPath();                //új path kezdése, előtte lévő kuka
+ctx.rect(110, 5, 20, 100);      //téglalap alakú path rajzolása
+ctx.moveTo(130, 5);             //path-t rajzoló "toll" áthelyezése
+ctx.lineTo(160, 35);            //"toll"-al új pontig húz vonalat
+ctx.lineTo(130, 65);
+ctx.stroke();                   //eddigi path megrajzolása
+
+ctx.beginPath();
+ctx.arc(200, 50, 30, 0, 2 * Math.PI);   //teljes körív megrajzolása
+ctx.fill();                     //eddigi útvonal kitöltése
+
+ctx.beginPath();
+ctx.moveTo(5, 200);
+ctx.quadraticCurveTo(50, 150, 105, 200); //control point x/y, endpoint x/y
+ctx.closePath();                //a mostani path-ban összeköti az utolsó/első pontot
+ctx.stroke();
+
+//többi opciók: ellipse, bezierCurveTo
+
+//gradient: egy külön változóba kell csinálni mielőtt használod
+//createLG(startX/y, endX/Y): megadja a gradient vonalát a canvason
+const gradSky = ctx.createLinearGradient(0, 230, 0, 350)
+gradSky.addColorStop(0, '#D8097E') //a gradient vonal 0%-ánál ez legyen
+gradSky.addColorStop(0.5, '#8C579C')
+gradSky.addColorStop(1, '#24468E')
+
+ctx.fillStyle = gradSky //gradient alkalmazása
+ctx.fillRect(0, 230, 200, 120)
+
+//ctx.translate: egész koordináta rendszer eltolása
+    //rotate, scale, transform(összetett)
+
+//Kép rajzolása:
+const pic = document.createElement('img')
+        //általában relatív útvonal
+pic.src = 'https://people.inf.elte.hu/hm37uq/frog.png'
+pic.addEventListener('load', () => { //amint betölti, futassa le ezt
+    ctx.drawImage(pic, 75, 265, 50, 50)
+})
+
+}
+
+//ANIMATION CYCLE ###########################################
+{
+let lastFrameTime = performance.now();
+
+function next() {
+    const currentTime = performance.now();
+    const deltaTime = currentTime - lastFrameTime;
+
+    update(deltaTime); // Update current state
+    render(); // Rerender the frame
+
+    lastFrameTime = currentTime;
+
+    requestAnimationFrame(next);
+}
+
+function update(dt) {
+    //updating the model here based on deltaTime
+}
+
+function render() {
+    //redrawing canvas stuff here (view)
+}
+
+next(); // Start the loop
+}
 
 }
