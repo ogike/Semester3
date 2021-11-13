@@ -1,0 +1,8 @@
+@font-face{font-family:'Lato Extended';font-style:normal;font-weight:300;src:url('https://canvas.elte.hu/egyeb_x_betuk/Lato-Light-7244318390.woff2') format("woff2");font-display:swap}
+@font-face{font-family:'Lato Extended';font-style:italic;font-weight:400;src:url('https://canvas.elte.hu/egyeb_x_betuk/Lato-Italic-4eb103b4d1.woff2') format("woff2");font-display:swap}
+@font-face{font-family:'Lato Extended';font-style:normal;font-weight:400;src:url('https://canvas.elte.hu/egyeb_x_betuk/Lato-Regular-bd03a2cc27.woff2') format("woff2");font-display:swap}
+@font-face{font-family:'Lato Extended';font-style:normal;font-weight:700;src:url('https://canvas.elte.hu/egyeb_x_betuk/Lato-Bold-cccb897485.woff2') format("woff2");font-display:swap}
+
+input,button,select,textarea{font-family:"Lato Extended","Lato","Helvetica Neue",Helvetica,Arial,sans-serif  !important}
+html{font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-family:"Lato Extended","Lato","Helvetica Neue",Helvetica,Arial,sans-serif!important}
+h1,h2,h3,h4,h5,h6 {font-family:"Lato Extended","Lato","Helvetica Neue",Helvetica,Arial,sans-serif  !important}

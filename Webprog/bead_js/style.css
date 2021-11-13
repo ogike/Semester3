@@ -1,0 +1,34 @@
+.option_div{
+    display: inline-block;
+    width: 150px;
+    /* height: auto; */
+}
+
+select{
+    width: 100px;
+}
+
+body{
+    background-color: #483d8b;
+}
+
+p{
+    color: white;
+}
+
+.hidden{
+    display: none;
+}
+
+table, td, tr, img{
+    border-spacing: 0;
+    border-collapse: collapse;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    height: auto;
+}
+
+td img{
+    display: block;
+}
