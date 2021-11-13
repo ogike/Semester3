@@ -1,5 +1,6 @@
 let boardSize = 7
 let rooms = []
+let extraRoom
 
 function newGame(){
     //deep copy of defaultRoomLayout and its sub-references
@@ -28,8 +29,11 @@ function newGame(){
         }
     }
 
+    extraRoom = randomRooms[0]
+
     //setting the view
     generateBoardGUI()
+    displayExtraRoom()
 }
 
 //takes in a room, and rotates it clock-wise 'times' times
@@ -49,6 +53,10 @@ function rotateRoom(room, times){
     }
 
     return newRoom
+}
+
+function rotateExtraRoom(){
+    rotateRoom(extraRoom, 1)
 }
 
 //TODO: kiszervezni helpers-be?

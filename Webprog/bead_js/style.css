@@ -4,6 +4,25 @@
     /* height: auto; */
 }
 
+.board_div{
+    display: inline-block;
+}
+
+/* #info_div{
+    position: relative;
+    top: 10%;
+} */
+
+/* TODO: WHY THE FUCK WONT THIS WORK */
+#info_div{
+    vertical-align: middle;
+}
+
+#extraRoomInfoImg{
+    width: 40px;
+    height: 40px;
+}
+
 select{
     width: 100px;
 }
@@ -31,4 +50,32 @@ table, td, tr, img{
 
 td img{
     display: block;
+}
+
+td button{
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 40px;
+    height: 40px;
+    display: block;
+    /* border: none; */
+    /* vertical-align: middle; */
+}
+
+td button img{
+    margin: 0;
+    display: block;
+}
+
+/* .buttonTd{
+    margin: auto;
+    border: none;
+} */
+
+.arrowImg{
+    width: 40px;
+    height: 40px;
+    margin: none;
 }
