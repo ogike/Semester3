@@ -72,6 +72,12 @@ function setRoomImage(td, room){
     //selection, avaliable route styling goes here
 }
 
+//TODO test
+function refreshTdImg(x, y){
+    let td = table.rows[x+1][y+1]
+    setRoomImage(td, rooms[x][y])
+}
+
 //TODO: rewrite for arrow table
 function getXyCoords(td) {
     return {
@@ -97,7 +103,12 @@ function createArrowTd(dir, pos) {
     btn.dataset.dir = dir
     btn.dataset.pos = pos
     btn.dataset.hasTile = false
-    btn.addEventListener('mousedown', arrowPressed) //TODO: proper delegalas
+
+    //TODO: proper delegalas
+    btn.addEventListener('click', arrowPressedLeftClick)
+    btn.addEventListener('contextmenu', arrowPressedRightClick)
+    btn.addEventListener('mouseenter', arrowHoverEnter)
+    btn.addEventListener('mouseleave', arrowHoverLeave)
     // delegal(td, 'btn', 'click', arrowPressed)
     
     td.appendChild(btn)

@@ -26,7 +26,7 @@ requestAnimationFrame(newGame)
 
 document.querySelector('#descBtn').addEventListener('click', showDescription)
 
-function arrowPressed(event){
+function arrowPressedLeftClick(event){
     let btn = event.target
     //TODO: this is very bad.
     if(!btn.matches('button')){
@@ -35,28 +35,55 @@ function arrowPressed(event){
 
     console.log(event)
 
-    //view: SelectArrow, deselectArrow
+    if(btn.dataset.hasTile == 'true'){
+        
+    }
+}
+
+function arrowHoverEnter(event){
+    let btn = event.target
+    //TODO: this is very bad.
+    if(!btn.matches('button')){
+        btn = btn.parentElement
+    }
+
     if(btn.dataset.hasTile == 'false'){
         if(lastSelectedArrow){
-            btn.dataset.hasTile = false
+            lastSelectedArrow.dataset.hasTile = false
             redrawArrow(lastSelectedArrow)
         }
         btn.dataset.hasTile = true
         lastSelectedArrow = btn
         drawTileOnArrow(btn)
-    } else{
-        if(event.button == 0){//left click on existing tile
-            btn.dataset.hasTile = false
-            lastSelectedArrow = null
-            redrawArrow(btn)
-            displayExtraRoom()
-        } else if (event.button == 2){ //right click
-            event.preventDefault() //prevent context menu pop-up
-            rotateExtraRoom()
-            drawTileOnArrow(btn)
-        }
+    }
+}
+
+function arrowHoverLeave(event){
+    let btn = event.target
+    //TODO: this is very bad.
+    if(!btn.matches('button')){
+        btn = btn.parentElement
     }
 
-    //model:
-    
+    if(btn.dataset.hasTile == 'true'){
+        btn.dataset.hasTile = false
+        lastSelectedArrow = null
+        redrawArrow(btn)
+        // displayExtraRoom()
+    }
+}
+
+function arrowPressedRightClick(event){
+    let btn = event.target
+    //TODO: this is very bad. But now twice.
+    if(!btn.matches('button')){
+        btn = btn.parentElement
+    }
+
+    if(btn.dataset.hasTile == 'true'){
+        event.preventDefault() //prevent context menu pop-up
+        rotateExtraRoom()
+        drawTileOnArrow(btn)
+        displayExtraRoom()
+    }
 }

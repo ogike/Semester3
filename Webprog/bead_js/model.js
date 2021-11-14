@@ -56,7 +56,28 @@ function rotateRoom(room, times){
 }
 
 function rotateExtraRoom(){
-    rotateRoom(extraRoom, 1)
+    extraRoom = rotateRoom(extraRoom, 1)
+}
+
+/**
+ * Pushes the extra room into a row
+ * @param {*} index The row index
+ * @param {*} start Push it into the start or end?
+ */
+function pushRoomIntoRow(index, start){
+    extra = extraRoom
+    if(start){
+        rooms[index][0] = extra
+        setRoomImage(index, 0)
+        
+        for (let j = 1; j < boardSize; j++) {
+            //TODO: CONTINUE HERE
+            // rooms[]
+        }
+
+        extraRoom = rooms[index][boardSize-1]
+        displayExtraRoom()
+    }
 }
 
 //TODO: kiszervezni helpers-be?
