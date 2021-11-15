@@ -1,6 +1,9 @@
 let boardSize = 7
 let rooms = []
 let extraRoom
+let numOfPlayers = 2 //TODO: remove hardcode
+let players = []
+let curPlayerI
 
 function newGame(){
     //deep copy of defaultRoomLayout and its sub-references
@@ -31,9 +34,38 @@ function newGame(){
 
     extraRoom = randomRooms[0]
 
-    //setting the view
+    //setting the board
     generateBoardGUI()
     displayExtraRoom()
+
+    //setting the players
+    players = [
+        Object.assign({}, player),
+        Object.assign({}, player)
+    ]
+    //TODO: turn all this into a cycle
+    //TODO: extract colors into data.js
+    players[0].color = 'green'
+    players[1].color = 'red'
+
+    players[0].id = 0
+    players[1].id = 1
+
+    players[0].posX = 0
+    players[0].posY = 0
+
+    players[1].posX = boardSize-1
+    players[1].posY = 0
+
+    generatePlayerIcons()
+    curPlayerI = 0
+}
+
+function moveCurPlayerToXy(x, y){
+    let curPlayer = players[curPlayerI]
+    curPlayer.posX = x
+    curPlayer.posY = y
+    drawPlayerOnPos(curPlayer)
 }
 
 //takes in a room, and rotates it clock-wise 'times' times
@@ -60,24 +92,74 @@ function rotateExtraRoom(){
 }
 
 /**
- * Pushes the extra room into a row
- * @param {*} index The row index
- * @param {*} start Push it into the start or end?
+ * //TODO: refactor, optimize (use extraRoom as temp too)
+ *             rename i/j indexes
+ * Pushes the extra room into the table
+ * @param {*} index The row/column index
+ * @param {*} start Push it from which side: 0: left, 1: top, 2: right, 3: bottom 
  */
-function pushRoomIntoRow(index, start){
-    extra = extraRoom
-    if(start){
-        rooms[index][0] = extra
-        setRoomImage(index, 0)
-        
-        for (let j = 1; j < boardSize; j++) {
-            //TODO: CONTINUE HERE
-            // rooms[]
-        }
+function pushRoomIntoTable(index, dir){
+    let tempBefore
+    let tempCur
 
-        extraRoom = rooms[index][boardSize-1]
-        displayExtraRoom()
+    switch (dir) {
+        case 0: //push into row from left
+            tempBefore = rooms[index][0]
+            rooms[index][0] = extraRoom
+            refreshTdImg(index, 0)
+            
+            for (let j = 1; j < boardSize; j++) {
+                tempCur = rooms[index][j]
+                rooms[index][j] = tempBefore
+                refreshTdImg(index, j)
+                tempBefore = tempCur
+            }
+            break;
+
+        case 1: //push into column from the top
+            tempBefore = rooms[0][index]
+            rooms[0][index] = extraRoom
+            refreshTdImg(0, index)
+            
+            for (let j = 1; j < boardSize; j++) {
+                tempCur = rooms[j][index]
+                rooms[j][index] = tempBefore
+                refreshTdImg(j, index)
+                tempBefore = tempCur
+            }
+            break;
+
+        case 2:  //push into row from right
+            tempBefore = rooms[index][boardSize-1]
+            rooms[index][boardSize-1] = extraRoom
+            refreshTdImg(index, boardSize-1)
+            
+            for (let j = boardSize-2; j >= 0; j--) {
+                tempCur = rooms[index][j]
+                rooms[index][j] = tempBefore
+                refreshTdImg(index, j)
+                tempBefore = tempCur
+            }
+
+        case 3: //push into column from the bottom
+            tempBefore = rooms[boardSize-1][index]
+            rooms[boardSize-1][index] = extraRoom
+            refreshTdImg(boardSize-1, index)
+            
+            for (let j = boardSize-2; j >= 0; j--) {
+                tempCur = rooms[j][index]
+                rooms[j][index] = tempBefore
+                refreshTdImg(j, index)
+                tempBefore = tempCur
+            }
+            break;
+
+        default:
+            console.error('Wrong dir')
+            break;
     }
+    extraRoom = tempCur
+    displayExtraRoom()
 }
 
 //TODO: kiszervezni helpers-be?

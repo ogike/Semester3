@@ -1,5 +1,14 @@
-// stores the room data
+//player class basically
+let player = {
+    posX: 0,
+    posY: 0,
+    id: 0,
+    source: "player.png",
+    color: "green"
+}
 
+
+// basic room types ###############################################
 let room_t = {
     type: "t-section", 
     source: "room_t.png",
@@ -30,6 +39,7 @@ let room_straight = {
     rotation: 0
 }
 
+// Default mao ####################################################
 const defaultRoomLayout = [
     [                                           //first row
         rotateRoom(room_corner, 3),

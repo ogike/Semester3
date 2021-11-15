@@ -1,6 +1,11 @@
 let table
 let lastSelectedArrow //REFACTOR maybe should be in controller
+let playerImgs
+const tileSizePx = 40
+const playerSizeW = 7
+const playerSizeH = 13
 
+//GAME INFO STUFF #############################################################
 function showDescription(event){
     document.querySelector('#desc_div').classList.toggle('hidden')
 }
@@ -11,6 +16,59 @@ function displayExtraRoom(){
     img.style.transform = `rotate(${extraRoom.rotation}deg)`
 }
 
+
+//PLAYER ICON STUFF ###########################################################
+function generatePlayerIcons(){
+    //TODO: remove hardcoded playernum
+    playerImgs = [
+        document.createElement('img'),
+        document.createElement('img')
+    ]
+    //map/forall
+    
+    playerImgs[0].src = "player_green.png" //where to set img?
+    playerImgs[1].src = "player_red.png"
+    
+    playerImgs[0].classList.add('playerImg')
+    playerImgs[1].classList.add('playerImg')
+    
+    playerImgs[0].style.position = 'absolute'
+    playerImgs[1].style.position = 'absolute'
+    
+    
+    drawPlayerOnPos(players[0])
+    drawPlayerOnPos(players[1])
+
+    table.appendChild(playerImgs[0])
+    table.appendChild(playerImgs[1])
+
+}
+
+function drawPlayerOnPos(player){
+    //set room.dataset.playersHere++
+    let room = rooms[player.posX, player.posY]
+
+    let td   = table.rows[player.posY+1].cells[player.posX+1]
+    let tdPos = getCenterOfTd(td)
+
+    img = playerImgs[player.id]
+    img.style.left = `${tdPos.x - playerSizeW/2}px`
+    img.style.top  = `${tdPos.y - playerSizeH/2}px`
+}
+
+/**
+ * @returns with center coords of td inside table
+ */
+function getCenterOfTd(td){
+    let coords = getXyCoords(td, true)
+    return{
+        x: (coords.x + 0.5) * tileSizePx,
+        y: (coords.y + 0.5) * tileSizePx
+    }
+}
+
+
+//BOARD/ROOM STUFF ############################################################
 function generateBoardGUI(){
     //TEMP removing existing board on new game
     let existingTable = document.querySelector('#mainTable')
@@ -41,6 +99,9 @@ function generateBoardGUI(){
             newRow.appendChild(newRoomTd)
 
             setRoomImage(newRoomTd, curRoom)
+
+            //TODO: delegálás?
+            newRoomImg.addEventListener('click', roomClicked)
         }
 
         if(curRowIndex == 1 || curRowIndex == 3 || curRowIndex == 5){
@@ -72,18 +133,27 @@ function setRoomImage(td, room){
     //selection, avaliable route styling goes here
 }
 
-//TODO test
 function refreshTdImg(x, y){
-    let td = table.rows[x+1][y+1]
+    let td = table.rows[x+1].cells[y+1]
+    console.log
     setRoomImage(td, rooms[x][y])
 }
 
-//TODO: rewrite for arrow table
-function getXyCoords(td) {
-    return {
-      x: td.cellIndex,
-      y: td.parentNode.sectionRowIndex,
+/**
+ * @param {*} td the td inside the table
+ * @param {*} absolute do we count the arrow rows/colums too?
+ * @returns with indexes x and y
+ */
+function getXyCoords(td, absolute = false) {
+    let coords = {
+        x: td.cellIndex,
+        y: td.parentNode.rowIndex,
     }
+    if(!absolute){ //if not absolute position, we subtract the arrow row/columns
+        coords.x -= 1
+        coords.y -= 1
+    }
+    return coords
 }
 
 

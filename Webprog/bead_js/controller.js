@@ -26,6 +26,11 @@ requestAnimationFrame(newGame)
 
 document.querySelector('#descBtn').addEventListener('click', showDescription)
 
+function roomClicked(event){
+    let roomCoords = getXyCoords(event.target.parentElement)
+    moveCurPlayerToXy(roomCoords.x, roomCoords.y)
+}
+
 function arrowPressedLeftClick(event){
     let btn = event.target
     //TODO: this is very bad.
@@ -33,10 +38,14 @@ function arrowPressedLeftClick(event){
         btn = btn.parentElement
     }
 
-    console.log(event)
-
     if(btn.dataset.hasTile == 'true'){
-        
+        let dir = parseInt(btn.dataset.dir)
+        let pos = parseInt(btn.dataset.pos)
+        pushRoomIntoTable(pos, dir)
+
+        btn.dataset.hasTile = false
+        lastSelectedArrow = null
+        redrawArrow(btn)
     }
 }
 
