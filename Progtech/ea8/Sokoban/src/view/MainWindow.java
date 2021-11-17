@@ -60,10 +60,11 @@ public class MainWindow extends JFrame{
         add(gameStatLabel, BorderLayout.NORTH);
         try { add(board = new Board(game), BorderLayout.CENTER); } catch (IOException ex) {}
         
-        
+        System.out.println(getContentPane());
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent ke) {
+                System.out.println("test before: " + ke);
                 super.keyPressed(ke); 
                 if (!game.isLevelLoaded()) return;
                 int kk = ke.getKeyCode();

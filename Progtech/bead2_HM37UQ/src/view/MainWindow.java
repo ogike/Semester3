@@ -8,11 +8,17 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 
-//first window, pálya kiválasztás
+/**
+ * The window that lets you start actual games with the specified sizes.
+ * @author ogike
+ */
 public class MainWindow extends BaseWindow {
     
     private List<Window> gameWindows = new ArrayList<>();
     
+    /**
+     * Creates the first Window
+     */
     public MainWindow() {
         
         JButton small = new JButton();
@@ -37,6 +43,11 @@ public class MainWindow extends BaseWindow {
         getContentPane().add(large);
     }
     
+    /**
+     * Returns an action that creates a new gameboard/window with the specifie size
+     * @param size The dimension of the next gameboard
+     * @return The ActionListener itself
+     */
     private ActionListener getActionListener(final int size) {
         return new ActionListener() { 
 
@@ -50,10 +61,16 @@ public class MainWindow extends BaseWindow {
         };
     }
     
+    /**
+     * @return The window list of all the gameboards
+     */
     public List<Window> getWindowList() {
         return gameWindows;
     }
     
+    /**
+     * Hard exits the whole program on exit
+     */
     @Override
     protected void doUponExit() {
         System.exit(0);

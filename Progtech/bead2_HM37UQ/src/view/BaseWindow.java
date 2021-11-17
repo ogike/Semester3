@@ -1,7 +1,5 @@
 package view;
 
-import resources.Resources;
-
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -10,27 +8,32 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
+/**
+ * The parent window that the other windows derive from
+ * Used to abstract the Exit dialgue mechanims, and the icon
+ * @author ogike
+ */
 public class BaseWindow extends JFrame {
 
     public BaseWindow() {
         setTitle("Fekete-lyuk játék");
-        setSize(450, 500);
+        setSize(275, 125);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
-
             @Override
             public void windowClosing(WindowEvent e) {
                 showExitConfirmation();
             }
-
         });
         
-        //TODO: maybe this should be handled by the resources class?
-        URL url = Resources.class.getResource("icon.png");
+        URL url = BaseWindow.class.getResource("antmaker.png");
         setIconImage(Toolkit.getDefaultToolkit().getImage(url));
 
     }
     
+    /**
+     * Extra dialogue before exit.
+     */
     private void showExitConfirmation() {
         int n = JOptionPane.showConfirmDialog(this, "Valóban ki akar lépni?",
                 "Megerősítés", JOptionPane.YES_NO_OPTION);
