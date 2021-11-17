@@ -7,6 +7,11 @@ let player = {
     color: "green"
 }
 
+const playerImgSources = [
+    "player_green.png", 
+    "player_red.png"
+]
+
 
 // basic room types ###############################################
 let room_t = {

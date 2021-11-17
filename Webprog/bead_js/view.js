@@ -1,4 +1,5 @@
 let table
+let nextPlayerLabel = document.querySelector('#nextPlayerLabel') //maybe dirty to set it here?
 let lastSelectedArrow //REFACTOR maybe should be in controller
 let playerImgs
 const tileSizePx = 40
@@ -16,38 +17,29 @@ function displayExtraRoom(){
     img.style.transform = `rotate(${extraRoom.rotation}deg)`
 }
 
+function displayNextPlayer(){
+    nextPlayerLabel.innerText = `Next up: Player ${curPlayerI+1}`
+}
+
 
 //PLAYER ICON STUFF ###########################################################
 function generatePlayerIcons(){
-    //TODO: remove hardcoded playernum
-    playerImgs = [
-        document.createElement('img'),
-        document.createElement('img')
-    ]
-    //map/forall
-    
-    playerImgs[0].src = "player_green.png" //where to set img?
-    playerImgs[1].src = "player_red.png"
-    
-    playerImgs[0].classList.add('playerImg')
-    playerImgs[1].classList.add('playerImg')
-    
-    playerImgs[0].style.position = 'absolute'
-    playerImgs[1].style.position = 'absolute'
-    
-    
-    drawPlayerOnPos(players[0])
-    drawPlayerOnPos(players[1])
+    playerImgs = players.map((pl) => {
+        let img = document.createElement('img')
+        img.classList.add('playerImg')
+        img.src = playerImgSources[pl.id]
+        return img
+    })
 
-    table.appendChild(playerImgs[0])
-    table.appendChild(playerImgs[1])
-
+    playerImgs.forEach((img) => table.appendChild(img))
+    players.forEach((pl) => drawPlayerOnPos(pl))
 }
 
 function drawPlayerOnPos(player){
     //set room.dataset.playersHere++
     let room = rooms[player.posX, player.posY]
 
+    console.log(player)
     let td   = table.rows[player.posY+1].cells[player.posX+1]
     let tdPos = getCenterOfTd(td)
 

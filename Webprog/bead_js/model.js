@@ -1,24 +1,24 @@
 let boardSize = 7
-let rooms = []
-let extraRoom
+let rooms = [] //room matrix
+let extraRoom //the room that we can slide in
 let numOfPlayers = 2 //TODO: remove hardcode
 let players = []
-let curPlayerI
+let curPlayerI  //current player index, from 0
+let canPushTile //ebben a körben lehet még tologatni?
 
 function newGame(){
-    //deep copy of defaultRoomLayout and its sub-references
-    rooms = JSON.parse(JSON.stringify(defaultRoomLayout))
+    rooms = getDeepCopy(defaultRoomLayout)
 
     //generating random rooms
     let randomRooms = []
     for(let i = 0; i < 13; i++){ //13 straight rooms
-        randomRooms.push( rotateRoom(room_straight, randomNum(0, 3)) )
+        randomRooms.push( rotateRoom(getDeepCopy(room_straight), randomNum(0, 3)) )
     }
     for(let i = 0; i < 15; i++){ //15 corner rooms
-        randomRooms.push( rotateRoom(room_corner, randomNum(0, 3)) )
+        randomRooms.push( rotateRoom(getDeepCopy(room_corner), randomNum(0, 3)) )
     }
     for(let i = 0; i < 6; i++){ //6 t-section rooms
-        randomRooms.push( rotateRoom(room_t, randomNum(0, 3)) )
+        randomRooms.push( rotateRoom(getDeepCopy(room_t), randomNum(0, 3)) )
     }
 
     //overwriting the empty (null) rooms with the random rooms
@@ -39,39 +39,94 @@ function newGame(){
     displayExtraRoom()
 
     //setting the players
-    players = [
-        Object.assign({}, player),
-        Object.assign({}, player)
-    ]
-    //TODO: turn all this into a cycle
-    //TODO: extract colors into data.js
-    players[0].color = 'green'
-    players[1].color = 'red'
+    for (let i = 0; i < numOfPlayers; i++) {
+        newPlayer = getDeepCopy(player);
+        newPlayer.id = i;
+        //colors??
+        switch (i) {
+            case 0:
+                newPlayer.posX = 0
+                newPlayer.posY = 0
+                break;
+            case 1:
+                newPlayer.posX = boardSize-1
+                newPlayer.posY = boardSize-1
+                break;
+            case 2:
+                newPlayer.posX = boardSize-1
+                newPlayer.posY = 0
+                break;
+            case 3:
+                newPlayer.posX = 0
+                newPlayer.posY = boardSize-1
+                break;
+            default:
+                console.error("Too many players!");
+        }
+        players.push(newPlayer)
+    }
 
-    players[0].id = 0
-    players[1].id = 1
-
-    players[0].posX = 0
-    players[0].posY = 0
-
-    players[1].posX = boardSize-1
-    players[1].posY = 0
-
-    generatePlayerIcons()
     curPlayerI = 0
+    generatePlayerIcons()
+    displayNextPlayer();
 }
+
+//PLAYERS ############################################################
 
 function moveCurPlayerToXy(x, y){
     let curPlayer = players[curPlayerI]
-    curPlayer.posX = x
-    curPlayer.posY = y
-    drawPlayerOnPos(curPlayer)
+
+    if(isOpenToEachOther(curPlayer.posX, curPlayer.posY, x, y)){
+        curPlayer.posX = x
+        curPlayer.posY = y
+        drawPlayerOnPos(curPlayer)
+
+        console.log("1: " + curPlayerI)
+        curPlayerI++;
+        console.log("1: " + curPlayerI)
+        curPlayerI %= numOfPlayers
+        console.log("1: " + curPlayerI)
+        displayNextPlayer();
+    }
+}
+
+
+//ROOMS ###########################################################
+
+/**
+ * Returns wheter 2 rooms are connected
+ * TEMP: only if they are direct neighbours
+ */
+function isOpenToEachOther(x1, y1, x2, y2){
+    console.log(x1 + ", " + y1 + ", " + x2  + ", " + y2)
+
+    //checking for out of bounds
+    if(x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0
+        || x1 >= boardSize || y1 >= boardSize
+        || x2 >= boardSize || x2 >= boardSize )
+        return false
+
+    let room1 = rooms[y1][x1]
+    let room2 = rooms[y2][x2]
+
+    //calculate the direction to each other??
+    if(x1 + 1 == x2 && y1 == y2) //to the right
+        return (room1.doors[1] && room2.doors[3]) ? true : false
+    if(x1 - 1 == x2 && y1 == y2) //to the left
+        return (room1.doors[3] && room2.doors[1]) ? true : false 
+    if(x1 == x2 && y1 - 1 == y2) //to the top
+        return (room1.doors[0] && room2.doors[2]) ? true : false 
+    if(x1 == x2 && y1 + 1 == y2) //to the bottom
+        return (room1.doors[2] && room2.doors[0]) ? true : false 
+    
+    return false //not a direct neighbor
+    
 }
 
 //takes in a room, and rotates it clock-wise 'times' times
 function rotateRoom(room, times){
     //might not be the most optimized thing to create one every time
-    let newRoom = Object.assign({}, room) //deep copy the object
+    let newRoom = getDeepCopy(room) //deep copy the object
 
     //set the rotation value for the image rotation value
     newRoom.rotation += 90 * times
@@ -162,8 +217,14 @@ function pushRoomIntoTable(index, dir){
     displayExtraRoom()
 }
 
+//UTILITY #########################################################################
+
 //TODO: kiszervezni helpers-be?
 //min and max are inclusive
 function randomNum(min, max){
     return Math.floor( Math.random() * (max + 1 - min) + min )
+}
+
+function getDeepCopy(obj){
+    return JSON.parse(JSON.stringify(obj))
 }

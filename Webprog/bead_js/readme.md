@@ -20,9 +20,9 @@ Minimálisan teljesítendő (enélkül nem fogadjuk el, 8 pont)
 [x] Játéktér: Egy 7x7-es rácsban megjelennek a fix elemek. (1 pont)
 [x] Játéktér: Ugyanebben a rácsban megjelennek véletlenszerűen forgatva és elhelyezve a mozgatható elemek. (2 pont)
 [ ] Játéktér: A rácsra fel van helyezve legalább 3 kincs véletlen helyre (kivéve a sarkokat) (0,5 pont)
-[ ] Játéktér: A rácsra fel van helyezve legalább 1 játékos figurája (0,5 pont)
+[x] Játéktér: A rácsra fel van helyezve legalább 1 játékos figurája (0,5 pont)
 [x] Katakomba átalakítása: A kimaradt szoba becsúsztatható egy mozgatható sorba vagy oszlopba. A katakomba szobái helyesen változnak. (2 pont)
-[ ] Lépés: A figurával szabályosan lehet lépni a szomszédos mező valamelyikére. (2 pont)
+[x] Lépés: A figurával szabályosan lehet lépni a szomszédos mező valamelyikére. (2 pont)
 
 Az alap feladatok (12 pont)
 
@@ -34,7 +34,7 @@ Az alap feladatok (12 pont)
 [ ] Játéktér: a figurák a sarkokban megjelennek (0,5 pont)
 [x] Játéktér: kimaradt elem megjelenik (0,5 pont)
 [ ] Játéktér: játékosadatok megjelennek (0,5 pont)
-[ ] Játéktér: jelezve van, hogy melyik az aktuális játékos (0,5 pont)
+[x] Játéktér: jelezve van, hogy melyik az aktuális játékos (0,5 pont)
 [x] Katakomba átalakítása: a kimaradt szoba forgatható becsúsztatás előtt (0,5 pont)
 [ ] Katakomba átalakítása: a szobák eltolása animációval történik (1 pont)
 [ ] Katakomba átalakítása: a kincsek abban a szobában maradnak, ahova az elején generáltuk őket (0,5 pont)
@@ -52,5 +52,6 @@ Plusz feladatok (plusz 5 pont)
 
 [ ] Lépés: minden elérhető szoba jelölése (3 pont)
 [ ] Mentés: játék közben egy gombra kattintva elmenthető az aktuális állapot (0,5 pont)
-[ ] Mentés: a kezdőképernyőn megjelenik, ha van mentett állapot (0,5 pont)
+
+
 [ ] Mentés: a kezdőképernyőn megjelenő mentett állapot betölthető (1 pont)
