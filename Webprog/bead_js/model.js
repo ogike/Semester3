@@ -4,7 +4,7 @@ let extraRoom //the room that we can slide in
 let numOfPlayers = 2 //TODO: remove hardcode
 let numOfTreasures= 2 //per player
 let players = []
-let treasures = [/*per player*/[/*(x, y)*/]] //TODO ugly
+let treasures = [/*per player*/[/*{x, y}*/]] //TODO ugly comment
 let curPlayerI  //current player index, from 0
 let canPushTile //ebben a körben lehet még tologatni?
 
@@ -38,6 +38,7 @@ function newGame(){
     extraRoom = randomRooms[0]
 
     //setting the treasures
+    treasures = []
     for (let playerI = 0; playerI < numOfPlayers; playerI++) {
         let playerITreasures = []
         for (let treasureI = 0; treasureI < numOfTreasures; treasureI++) {
@@ -50,7 +51,8 @@ function newGame(){
 
                 //TODO: bug: might neew to switch indexed up
                 if(rooms[ranX][ranY].hasTreasure == -1){
-                    playerITreasures.push((ranX, ranY))
+                    playerITreasures.push({x: ranX, y: ranY})
+                    rooms[ranX][ranY].hasTreasure = playerI
                     hasPlaced = true
                 }
                 curTries++;
@@ -67,8 +69,9 @@ function newGame(){
 
     //setting the players
     for (let i = 0; i < numOfPlayers; i++) {
-        newPlayer = getDeepCopy(player);
-        newPlayer.id = i;
+        newPlayer = getDeepCopy(player)
+        newPlayer.id = i
+        newPlayer.score = 0
         //colors??
         switch (i) {
             case 0:
@@ -98,7 +101,10 @@ function newGame(){
     curPlayerI = 0
     canPushTile = true
     generatePlayerIcons()
-    displayNextPlayer();
+    displayNextPlayer()
+    generatePlayerInfoLabels()
+
+    generateTreasureIcons()
 }
 
 //PLAYERS ############################################################
@@ -109,6 +115,23 @@ function moveCurPlayerToXy(x, y){
     if(isOpenToEachOther(curPlayer.posX, curPlayer.posY, x, y)){
         curPlayer.posX = x
         curPlayer.posY = y
+
+        if(rooms[curPlayer.posX][curPlayer.posY].hasTreasure == curPlayer.id){
+            //player stepped on their treasure
+            curPlayer.score++
+            displayPlayerInfo(curPlayer.id)
+
+            rooms[curPlayer.posX][curPlayer.posY].hasTreasure = -1
+            treasures[curPlayer.id].shift() //removes first element from array
+
+            if(treasures[curPlayer.id].length == 0){ //score == numOfTreasures
+                playerFoundAllTreasures(curPlayer.id)
+                //TODO: something doesnt work??
+            } else{
+                displayTreasure(curPlayer.id)
+            }
+        }
+
         drawPlayerOnPos(curPlayer)
     }
 }

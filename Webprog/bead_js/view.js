@@ -3,9 +3,12 @@ let nextPlayerLabel = document.querySelector('#nextPlayerLabel') //maybe dirty t
 let lastSelectedArrow //REFACTOR maybe should be in controller
 let playerImgs
 let treasureImgs
+let playerScoreLabels
+
 const tileSizePx = 40
 const playerSizeW = 7
 const playerSizeH = 13
+const treasureSizeWH = 10
 
 //GAME INFO STUFF #############################################################
 function showDescription(event){
@@ -31,6 +34,7 @@ function displayNextPlayer(){
 
 //PLAYER ICON STUFF ###########################################################
 function generatePlayerIcons(){
+    playerImgs = []
     playerImgs = players.map((pl) => {
         let img = document.createElement('img')
         img.classList.add('playerImg')
@@ -38,7 +42,7 @@ function generatePlayerIcons(){
         return img
     })
 
-    //TODO: refactor like trasures
+    //TODO: refactor like treasures
     playerImgs.forEach((img) => table.appendChild(img))
     players.forEach((pl) => drawPlayerOnPos(pl))
 }
@@ -49,38 +53,68 @@ function drawPlayerOnPos(player){
 
     let td   = table.rows[player.posY+1].cells[player.posX+1]
     let tdPos = getCenterOfTd(td)
+    let img = playerImgs[player.id]
 
-    img = playerImgs[player.id]
     img.style.left = `${tdPos.x - playerSizeW/2}px`
     img.style.top  = `${tdPos.y - playerSizeH/2}px`
 }
 
-/**
- * @returns with center coords of td inside table
- */
-function getCenterOfTd(td){
-    let coords = getXyCoords(td, true)
-    return{
-        x: (coords.x + 0.5) * tileSizePx,
-        y: (coords.y + 0.5) * tileSizePx
-    }
+function generatePlayerInfoLabels(){
+    let descDiv = document.querySelector("#info_div")
+
+    playerScoreLabels = []
+    players.forEach( (pl) => {
+        let newLabel = document.createElement('p')
+        newLabel.id = `player${pl.id}ScoreLabel`
+        newLabel.innerText = `Player ${pl.id+1}'s score: 0`
+        playerScoreLabels.push(newLabel)
+        descDiv.appendChild(newLabel)
+    })
 }
 
+/**
+ * Updates the player info (score) for the player
+ * @param {} playerI 
+ */
+function displayPlayerInfo(playerI){
+    let newText = `Player ${playerI+1}'s score: ${players[playerI].score}`
+    playerScoreLabels[playerI].innerText = newText
+}
+
+function playerFoundAllTreasures(playerI){
+    let newText = `Player ${playerI+1}'s score: MAX, go back to your starting position to win!`
+    playerScoreLabels[playerI].innerText = newText
+}
+
+
+//TREASURE STUFF ##############################################################
 function generateTreasureIcons(){
+    treasureImgs = []
     treasureImgs = players.map( (pl) => {
         let img = document.createElement('img')
         img.classList.add('treasureImg')
         img.src = treasureImgSources[pl.id]
         table.appendChild(img)
-        displayTreasure(pl.id)
         return img
     })
 
-    //TODO: might have errors, test
+    players.forEach((pl) => displayTreasure(pl.id)) //put them into place
 }
 
 function displayTreasure(playerI){
-    //TODO NEXT
+    if(treasures[playerI].length == 0){
+        //idk where this should be checked...?
+        console.error("Trying to display non-existant treasure")
+        return
+    }
+    
+    let img = treasureImgs[playerI]
+    let coords = treasures[playerI][0]
+    let td   = table.rows[coords.y+1].cells[coords.x+1]
+    let tdPos = getCenterOfTd(td)
+
+    img.style.left = `${tdPos.x - treasureSizeWH/2}px`
+    img.style.top  = `${tdPos.y - treasureSizeWH/2}px`
 }
 
 
@@ -170,6 +204,17 @@ function getXyCoords(td, absolute = false) {
         coords.y -= 1
     }
     return coords
+}
+
+/**
+ * @returns with center coords of td inside table
+ */
+ function getCenterOfTd(td){
+    let coords = getXyCoords(td, true)
+    return{
+        x: (coords.x + 0.5) * tileSizePx,
+        y: (coords.y + 0.5) * tileSizePx
+    }
 }
 
 

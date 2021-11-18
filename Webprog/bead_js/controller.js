@@ -60,7 +60,6 @@ function arrowHoverEnter(event){
         btn = btn.parentElement
     }
 
-    console.log(canPushTile)
     if(!canPushTile) //if the player is out of moves
         return
 

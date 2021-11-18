@@ -2,7 +2,7 @@
 let player = {
     posX: 0,
     posY: 0,
-    curScore = 0,
+    curScore : 0,
     id: 0,
     source: "player.png",
     color: "green"
@@ -32,7 +32,7 @@ let room_t = {
             true,   //bottom
             false], //left
     rotation: 0,
-    hasTreasure = -1 //indicates which players treasure is here
+    hasTreasure: -1 //indicates which players treasure is here
                      //-1 if none
                      //-2 if impossible (corrner pieces)
 }
@@ -45,7 +45,7 @@ let room_corner = {
             true,   //bottom
             true],  //left
     rotation: 0,
-    hasTreasure = -1
+    hasTreasure: -1
 }
 
 let room_straight = {
@@ -56,7 +56,7 @@ let room_straight = {
             false,  //bottom
             true],  //left
     rotation: 0,
-    hasTreasure = -1
+    hasTreasure: -1
 }
 
 function disableTreasure(room){

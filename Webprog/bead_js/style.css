@@ -81,8 +81,14 @@ td button img{
     margin: 0;
 }
 
-.playerImg, .treasureImg{
+.playerImg{
     position: absolute;
     width: 7px;
     height: 13px;
+}
+
+.treasureImg{
+    position: absolute;
+    width: 10px;
+    height: 10px;
 }
