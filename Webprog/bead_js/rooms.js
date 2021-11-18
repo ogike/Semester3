@@ -2,6 +2,7 @@
 let player = {
     posX: 0,
     posY: 0,
+    curScore = 0,
     id: 0,
     source: "player.png",
     color: "green"
@@ -9,7 +10,16 @@ let player = {
 
 const playerImgSources = [
     "player_green.png", 
-    "player_red.png"
+    "player_red.png",
+    "player_blue.png",
+    "player_yellow.png"
+]
+
+const treasureImgSources = [
+    "gems_green.png",
+    "gems_red.png",
+    "gems_blue.png",
+    "gems_yellow.png"
 ]
 
 
@@ -21,7 +31,10 @@ let room_t = {
             true,   //right
             true,   //bottom
             false], //left
-    rotation: 0
+    rotation: 0,
+    hasTreasure = -1 //indicates which players treasure is here
+                     //-1 if none
+                     //-2 if impossible (corrner pieces)
 }
 
 let room_corner = {
@@ -31,7 +44,8 @@ let room_corner = {
             false,  //right
             true,   //bottom
             true],  //left
-    rotation: 0
+    rotation: 0,
+    hasTreasure = -1
 }
 
 let room_straight = {
@@ -41,19 +55,25 @@ let room_straight = {
             true,   //right
             false,  //bottom
             true],  //left
-    rotation: 0
+    rotation: 0,
+    hasTreasure = -1
 }
 
-// Default mao ####################################################
+function disableTreasure(room){
+    room.hasTreasure = -2
+    return room
+}
+
+// Default map ####################################################
 const defaultRoomLayout = [
     [                                           //first row
-        rotateRoom(room_corner, 3),
+        disableTreasure(rotateRoom(room_corner, 3)),
         null,
         rotateRoom(room_t, 1),
         null,
         rotateRoom(room_t, 1),
         null,
-        rotateRoom(room_corner, 0)
+        disableTreasure(rotateRoom(room_corner, 0))
     ],
     [null, null, null, null, null, null, null], //second row
     [                                           //third row
@@ -77,12 +97,12 @@ const defaultRoomLayout = [
     ],
     [null, null, null, null, null, null, null], //sixth row
     [                                           //seventh row
-        rotateRoom(room_corner, 2),
+        disableTreasure(rotateRoom(room_corner, 2)),
         null,
         rotateRoom(room_t, 3),
         null,
         rotateRoom(room_t, 3),
         null,
-        rotateRoom(room_corner, 1)
+        disableTreasure(rotateRoom(room_corner, 1))
     ]
 ]

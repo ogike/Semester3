@@ -2,10 +2,13 @@ let boardSize = 7
 let rooms = [] //room matrix
 let extraRoom //the room that we can slide in
 let numOfPlayers = 2 //TODO: remove hardcode
+let numOfTreasures= 2 //per player
 let players = []
+let treasures = [/*per player*/[/*(x, y)*/]] //TODO ugly
 let curPlayerI  //current player index, from 0
 let canPushTile //ebben a körben lehet még tologatni?
 
+//GENERATING THE GAME ######################################################
 function newGame(){
     rooms = getDeepCopy(defaultRoomLayout)
 
@@ -33,6 +36,30 @@ function newGame(){
     }
 
     extraRoom = randomRooms[0]
+
+    //setting the treasures
+    for (let playerI = 0; playerI < numOfPlayers; playerI++) {
+        let playerITreasures = []
+        for (let treasureI = 0; treasureI < numOfTreasures; treasureI++) {
+            let hasPlaced = false
+            let curTries = 0
+
+            while(!hasPlaced && curTries < 50){
+                let ranX = randomNum(0, boardSize-1)
+                let ranY = randomNum(0, boardSize-1)
+
+                //TODO: bug: might neew to switch indexed up
+                if(rooms[ranX][ranY].hasTreasure == -1){
+                    playerITreasures.push((ranX, ranY))
+                    hasPlaced = true
+                }
+                curTries++;
+            }
+            if(curTries >= 50)
+                console.error("Infinite loop during treasure placing!")
+        }
+        treasures.push(playerITreasures)
+    }
 
     //setting the board
     generateBoardGUI()
@@ -64,9 +91,12 @@ function newGame(){
                 console.error("Too many players!");
         }
         players.push(newPlayer)
+
+        
     }
 
     curPlayerI = 0
+    canPushTile = true
     generatePlayerIcons()
     displayNextPlayer();
 }
@@ -80,14 +110,15 @@ function moveCurPlayerToXy(x, y){
         curPlayer.posX = x
         curPlayer.posY = y
         drawPlayerOnPos(curPlayer)
-
-        console.log("1: " + curPlayerI)
-        curPlayerI++;
-        console.log("1: " + curPlayerI)
-        curPlayerI %= numOfPlayers
-        console.log("1: " + curPlayerI)
-        displayNextPlayer();
     }
+}
+
+function endTurn(){
+    curPlayerI++
+    curPlayerI %= numOfPlayers
+    displayNextPlayer()
+    canPushTile = true
+    displayExtraRoom(true)
 }
 
 
@@ -98,7 +129,7 @@ function moveCurPlayerToXy(x, y){
  * TEMP: only if they are direct neighbours
  */
 function isOpenToEachOther(x1, y1, x2, y2){
-    console.log(x1 + ", " + y1 + ", " + x2  + ", " + y2)
+    // console.log(x1 + ", " + y1 + ", " + x2  + ", " + y2)
 
     //checking for out of bounds
     if(x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0
@@ -157,6 +188,9 @@ function pushRoomIntoTable(index, dir){
     let tempBefore
     let tempCur
 
+    if(!canPushTile)
+        return
+
     switch (dir) {
         case 0: //push into row from left
             tempBefore = rooms[index][0]
@@ -214,13 +248,17 @@ function pushRoomIntoTable(index, dir){
             break;
     }
     extraRoom = tempCur
-    displayExtraRoom()
+    canPushTile = false
+    displayExtraRoom(false)
 }
 
 //UTILITY #########################################################################
 
 //TODO: kiszervezni helpers-be?
-//min and max are inclusive
+/**
+ * @param {*} min inclusive
+ * @param {*} max inclusive
+ */
 function randomNum(min, max){
     return Math.floor( Math.random() * (max + 1 - min) + min )
 }

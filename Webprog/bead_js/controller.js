@@ -26,6 +26,10 @@ requestAnimationFrame(newGame)
 
 document.querySelector('#descBtn').addEventListener('click', showDescription)
 
+document.querySelector('#endTurnBtn').addEventListener('click', (event) => {
+    endTurn();
+})
+
 function roomClicked(event){
     let roomCoords = getXyCoords(event.target.parentElement)
     moveCurPlayerToXy(roomCoords.x, roomCoords.y)
@@ -55,6 +59,10 @@ function arrowHoverEnter(event){
     if(!btn.matches('button')){
         btn = btn.parentElement
     }
+
+    console.log(canPushTile)
+    if(!canPushTile) //if the player is out of moves
+        return
 
     if(btn.dataset.hasTile == 'false'){
         if(lastSelectedArrow){

@@ -2,6 +2,7 @@ let table
 let nextPlayerLabel = document.querySelector('#nextPlayerLabel') //maybe dirty to set it here?
 let lastSelectedArrow //REFACTOR maybe should be in controller
 let playerImgs
+let treasureImgs
 const tileSizePx = 40
 const playerSizeW = 7
 const playerSizeH = 13
@@ -11,10 +12,16 @@ function showDescription(event){
     document.querySelector('#desc_div').classList.toggle('hidden')
 }
 
-function displayExtraRoom(){
+function displayExtraRoom(active = true){
     let img = document.querySelector('#extraRoomInfoImg')
     img.src = extraRoom.source
     img.style.transform = `rotate(${extraRoom.rotation}deg)`
+
+    if(active){
+        img.style.filter = ""
+    } else{
+        img.style.filter = "grayscale(100%)"
+    }
 }
 
 function displayNextPlayer(){
@@ -31,6 +38,7 @@ function generatePlayerIcons(){
         return img
     })
 
+    //TODO: refactor like trasures
     playerImgs.forEach((img) => table.appendChild(img))
     players.forEach((pl) => drawPlayerOnPos(pl))
 }
@@ -39,7 +47,6 @@ function drawPlayerOnPos(player){
     //set room.dataset.playersHere++
     let room = rooms[player.posX, player.posY]
 
-    console.log(player)
     let td   = table.rows[player.posY+1].cells[player.posX+1]
     let tdPos = getCenterOfTd(td)
 
@@ -57,6 +64,23 @@ function getCenterOfTd(td){
         x: (coords.x + 0.5) * tileSizePx,
         y: (coords.y + 0.5) * tileSizePx
     }
+}
+
+function generateTreasureIcons(){
+    treasureImgs = players.map( (pl) => {
+        let img = document.createElement('img')
+        img.classList.add('treasureImg')
+        img.src = treasureImgSources[pl.id]
+        table.appendChild(img)
+        displayTreasure(pl.id)
+        return img
+    })
+
+    //TODO: might have errors, test
+}
+
+function displayTreasure(playerI){
+    //TODO NEXT
 }
 
 
