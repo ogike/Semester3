@@ -92,3 +92,8 @@ td button img{
     width: 10px;
     height: 10px;
 }
+
+#winText{
+    display: none;
+    font-size: 2em;
+}

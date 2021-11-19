@@ -4,6 +4,7 @@ let lastSelectedArrow //REFACTOR maybe should be in controller
 let playerImgs
 let treasureImgs
 let playerScoreLabels
+let extraRoomImg
 
 const tileSizePx = 40
 const playerSizeW = 7
@@ -15,15 +16,18 @@ function showDescription(event){
     document.querySelector('#desc_div').classList.toggle('hidden')
 }
 
-function displayExtraRoom(active = true){
-    let img = document.querySelector('#extraRoomInfoImg')
-    img.src = extraRoom.source
-    img.style.transform = `rotate(${extraRoom.rotation}deg)`
+/**
+ * Display the extra room
+ * TODO: refactor: maybe canPushTile should be passed as a parameter?
+ */
+function displayExtraRoom(){
+    extraRoomImg.src = extraRoom.source
+    extraRoomImg.style.transform = `rotate(${extraRoom.rotation}deg)`
 
-    if(active){
-        img.style.filter = ""
+    if(canPushTile){
+        extraRoomImg.style.filter = ""
     } else{
-        img.style.filter = "grayscale(100%)"
+        extraRoomImg.style.filter = "grayscale(100%)"
     }
 }
 
@@ -82,8 +86,16 @@ function displayPlayerInfo(playerI){
 }
 
 function playerFoundAllTreasures(playerI){
-    let newText = `Player ${playerI+1}'s score: MAX, go back to your starting position to win!`
+    let newText = `Player ${playerI+1}'s score: ${numOfTreasures}, go back to your starting position to win!`
     playerScoreLabels[playerI].innerText = newText
+}
+
+function displayPlayerWin(playerI){
+    let winLabel = document.querySelector('#winText')
+    winLabel.style.display = 'block'
+    winLabel.innerText = `Congratulations, player ${playerI+1} won!`
+    playerScoreLabels[playerI].innerText = `Player ${playerI+1}'s score: ${numOfTreasures}, just won!`
+    //TODO: fancy graying out/etc
 }
 
 
@@ -102,19 +114,28 @@ function generateTreasureIcons(){
 }
 
 function displayTreasure(playerI){
+    let img = treasureImgs[playerI]
     if(treasures[playerI].length == 0){
-        //idk where this should be checked...?
-        console.error("Trying to display non-existant treasure")
+        //if there are no more treasures, hide the existing one
+        img.style.display = 'none'
         return
     }
     
-    let img = treasureImgs[playerI]
     let coords = treasures[playerI][0]
-    let td   = table.rows[coords.y+1].cells[coords.x+1]
-    let tdPos = getCenterOfTd(td)
+    let td
 
-    img.style.left = `${tdPos.x - treasureSizeWH/2}px`
-    img.style.top  = `${tdPos.y - treasureSizeWH/2}px`
+    if(coords.x < 0 || coords.x >= boardSize || coords.y < 0 || coords.y >= boardSize){
+        //if the treasure is on the extra room
+        td = table.rows[boardSize+1].cells[boardSize+1]
+    }
+    else{
+        //if the treasure is in the table
+        td   = table.rows[coords.y+1].cells[coords.x+1]
+    }
+    
+    let newPos = getCenterOfTd(td)
+    img.style.left = `${newPos.x - treasureSizeWH/2}px`
+    img.style.top  = `${newPos.y - treasureSizeWH/2}px`
 }
 
 
@@ -165,6 +186,12 @@ function generateBoardGUI(){
     }
 
     table.appendChild( createArrowRow(3) )
+
+    //generating the extra room at the bottom-right corner of the table
+    extraRoomImg = document.createElement('img')
+    extraRoomImg.src = 'help.jpg' //placeholder
+    table.rows[boardSize+1].cells[boardSize+1].appendChild(extraRoomImg)
+
     document.querySelector('#table_div').appendChild(table)
     document.querySelector('#gameboard_div').classList.remove('hidden')
 }

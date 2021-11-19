@@ -1,9 +1,11 @@
 //player class basically
 let player = {
-    posX: 0,
-    posY: 0,
-    curScore : 0,
     id: 0,
+    posX: 0, //row in model's room matrix
+    posY: 0, //rroms inside the rows
+    curScore : 0,
+    startingX: 0,
+    startingY: 0,
     source: "player.png",
     color: "green"
 }

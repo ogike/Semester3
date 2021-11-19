@@ -27,15 +27,20 @@ requestAnimationFrame(newGame)
 document.querySelector('#descBtn').addEventListener('click', showDescription)
 
 document.querySelector('#endTurnBtn').addEventListener('click', (event) => {
+    if(hasGameFinished) return
     endTurn();
 })
 
 function roomClicked(event){
+    if(hasGameFinished) return
+    
     let roomCoords = getXyCoords(event.target.parentElement)
     moveCurPlayerToXy(roomCoords.x, roomCoords.y)
 }
 
 function arrowPressedLeftClick(event){
+    if(hasGameFinished) return
+    
     let btn = event.target
     //TODO: this is very bad.
     if(!btn.matches('button')){
@@ -54,6 +59,8 @@ function arrowPressedLeftClick(event){
 }
 
 function arrowHoverEnter(event){
+    if(hasGameFinished) return
+    
     let btn = event.target
     //TODO: this is very bad.
     if(!btn.matches('button')){
@@ -75,6 +82,8 @@ function arrowHoverEnter(event){
 }
 
 function arrowHoverLeave(event){
+    if(hasGameFinished) return
+    
     let btn = event.target
     //TODO: this is very bad.
     if(!btn.matches('button')){
@@ -90,6 +99,8 @@ function arrowHoverLeave(event){
 }
 
 function arrowPressedRightClick(event){
+    if(hasGameFinished) return
+    
     let btn = event.target
     //TODO: this is very bad. But now twice.
     if(!btn.matches('button')){

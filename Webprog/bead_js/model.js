@@ -1,15 +1,19 @@
 let boardSize = 7
-let rooms = [] //room matrix
+let rooms = [] //room matrix, [rows[rooms]]
 let extraRoom //the room that we can slide in
 let numOfPlayers = 2 //TODO: remove hardcode
 let numOfTreasures= 2 //per player
 let players = []
-let treasures = [/*per player*/[/*{x, y}*/]] //TODO ugly comment
+let treasures = [/*per player*/[/*{x, y, isInExtraRoom}*/]] //TODO ugly comment
 let curPlayerI  //current player index, from 0
 let canPushTile //ebben a körben lehet még tologatni?
+let lastPushedIndex
+let lastPushedDir
+let hasGameFinished
 
 //GENERATING THE GAME ######################################################
 function newGame(){
+    hasGameFinished = false
     rooms = getDeepCopy(defaultRoomLayout)
 
     //generating random rooms
@@ -51,7 +55,7 @@ function newGame(){
 
                 //TODO: bug: might neew to switch indexed up
                 if(rooms[ranX][ranY].hasTreasure == -1){
-                    playerITreasures.push({x: ranX, y: ranY})
+                    playerITreasures.push({x: ranX, y: ranY, isInExtraRoom: false})
                     rooms[ranX][ranY].hasTreasure = playerI
                     hasPlaced = true
                 }
@@ -65,7 +69,6 @@ function newGame(){
 
     //setting the board
     generateBoardGUI()
-    displayExtraRoom()
 
     //setting the players
     for (let i = 0; i < numOfPlayers; i++) {
@@ -93,23 +96,27 @@ function newGame(){
             default:
                 console.error("Too many players!");
         }
-        players.push(newPlayer)
-
-        
+        newPlayer.startingX = newPlayer.posX
+        newPlayer.startingY = newPlayer.posY
+        players.push(newPlayer)        
     }
 
     curPlayerI = 0
     canPushTile = true
+    lastPushedIndex = -1
+    lastPushedDir = -1
     generatePlayerIcons()
     displayNextPlayer()
+    displayExtraRoom()
     generatePlayerInfoLabels()
-
     generateTreasureIcons()
 }
 
 //PLAYERS ############################################################
 
 function moveCurPlayerToXy(x, y){
+    if(hasGameFinished) return
+
     let curPlayer = players[curPlayerI]
 
     if(isOpenToEachOther(curPlayer.posX, curPlayer.posY, x, y)){
@@ -126,10 +133,14 @@ function moveCurPlayerToXy(x, y){
 
             if(treasures[curPlayer.id].length == 0){ //score == numOfTreasures
                 playerFoundAllTreasures(curPlayer.id)
-                //TODO: something doesnt work??
-            } else{
-                displayTreasure(curPlayer.id)
             }
+            displayTreasure(curPlayer.id) //also hides the existing one if there are none more
+        }
+
+        if(curPlayer.score == numOfTreasures && curPlayer.startingX == x && curPlayer.startingY == y){
+            //player won the game
+            displayPlayerWin(curPlayer.id)
+            hasGameFinished = true
         }
 
         drawPlayerOnPos(curPlayer)
@@ -141,7 +152,7 @@ function endTurn(){
     curPlayerI %= numOfPlayers
     displayNextPlayer()
     canPushTile = true
-    displayExtraRoom(true)
+    displayExtraRoom()
 }
 
 
@@ -162,6 +173,9 @@ function isOpenToEachOther(x1, y1, x2, y2){
 
     let room1 = rooms[y1][x1]
     let room2 = rooms[y2][x2]
+
+    //TEMP DEBUG
+    return true
 
     //calculate the direction to each other??
     if(x1 + 1 == x2 && y1 == y2) //to the right
@@ -201,8 +215,9 @@ function rotateExtraRoom(){
 }
 
 /**
- * //TODO: refactor, optimize (use extraRoom as temp too)
+ * TODO: refactor, optimize (use extraRoom as temp too)
  *             rename i/j indexes
+ * Kérlek bocsáss meg az irányonkénti csúnya pasztáért :bottom_cat: 
  * Pushes the extra room into the table
  * @param {*} index The row/column index
  * @param {*} start Push it from which side: 0: left, 1: top, 2: right, 3: bottom 
@@ -211,7 +226,15 @@ function pushRoomIntoTable(index, dir){
     let tempBefore
     let tempCur
 
-    if(!canPushTile)
+    if(!canPushTile  || hasGameFinished)
+        return
+
+    //TODO: refactor: maradékos osztás bizbasszal egyszerűsteni?
+    if(lastPushedIndex == index && (
+               (dir == 0 && lastPushedDir == 2) 
+            || (dir == 2 && lastPushedDir == 0)
+            || (dir == 1 && lastPushedDir == 3)
+            || (dir == 3 && lastPushedDir == 1) ) )
         return
 
     switch (dir) {
@@ -226,6 +249,30 @@ function pushRoomIntoTable(index, dir){
                 refreshTdImg(index, j)
                 tempBefore = tempCur
             }
+
+            players.forEach(pl => {
+                //játékos kicsúsztatás
+                if(pl.posY == index){
+                    pl.posX = (pl.posX+1) % boardSize
+                    drawPlayerOnPos(pl)
+                }
+
+                //treasure-ök ellenőrzése
+                if(treasures[pl.id].length != 0){
+                    treasure = treasures[pl.id][0]
+
+                    if(treasure.x < 0 || treasure.x >= boardSize 
+                       || treasure.y < 0 || treasure.y >= boardSize){
+                       //if treasure was on the extraRoom
+                        treasure.x = 0
+                        treasure.y = index
+                    } else if(treasure.y == index){ //treasure kicsúsztatása
+                        treasure.x++
+                        displayTreasure(pl.id)
+                    }
+
+                }
+            });
             break;
 
         case 1: //push into column from the top
@@ -239,6 +286,28 @@ function pushRoomIntoTable(index, dir){
                 refreshTdImg(j, index)
                 tempBefore = tempCur
             }
+
+            players.forEach(pl => {
+                //játékos kicsúsztatás
+                if(pl.posX == index){
+                    pl.posY = (pl.posY+1) % boardSize
+                    drawPlayerOnPos(pl)
+                }
+                
+                if(treasure.x < 0 || treasure.x >= boardSize 
+                    || treasure.y < 0 || treasure.y >= boardSize){
+                    //if treasure was on the extraRoom
+                     treasure.x = index
+                     treasure.y = extraRoom
+                 } else if(treasures[pl.id].length != 0){
+                    
+                    treasure = treasures[pl.id][0]
+                    if(treasure.x == index){
+                        treasure.y++
+                        displayTreasure(pl.id)
+                    }
+                }
+            });
             break;
 
         case 2:  //push into row from right
@@ -253,6 +322,30 @@ function pushRoomIntoTable(index, dir){
                 tempBefore = tempCur
             }
 
+            players.forEach(pl => {
+                //játékos kicsúsztatás
+                if(pl.posY == index){
+                    pl.posX--
+                    if(pl.posX < 0) pl.posX = boardSize-1 
+                    drawPlayerOnPos(pl)
+                }
+                
+                if(treasure.x < 0 || treasure.x >= boardSize 
+                    || treasure.y < 0 || treasure.y >= boardSize){
+                    //if treasure was on the extraRoom
+                     treasure.x = boardSize-1
+                     treasure.y = index
+                //TODO elbasztam a copypasztát
+                 } else if(treasures[pl.id].length != 0){
+                    treasure = treasures[pl.id][0]
+                    if(treasure.y == index){
+                        treasure.x--
+                        displayTreasure(pl.id)
+                    }
+                }
+            });
+            break;
+
         case 3: //push into column from the bottom
             tempBefore = rooms[boardSize-1][index]
             rooms[boardSize-1][index] = extraRoom
@@ -264,6 +357,28 @@ function pushRoomIntoTable(index, dir){
                 refreshTdImg(j, index)
                 tempBefore = tempCur
             }
+
+            players.forEach(pl => {
+                //játékos kicsúsztatás
+                if(pl.posX == index){
+                    pl.posY--
+                    if(pl.posY < 0) pl.posY = boardSize-1 
+                    drawPlayerOnPos(pl)
+                }
+                
+                if(treasure.x < 0 || treasure.x >= boardSize 
+                    || treasure.y < 0 || treasure.y >= boardSize){
+                    //if treasure was on the extraRoom
+                     treasure.x = index
+                     treasure.y = board
+                 } else if(treasures[pl.id].length != 0){
+                    treasure = treasures[pl.id][0]
+                    if(treasure.x == index){
+                        treasure.y--
+                        displayTreasure(pl.id)
+                    }
+                }
+            });
             break;
 
         default:
@@ -272,7 +387,10 @@ function pushRoomIntoTable(index, dir){
     }
     extraRoom = tempCur
     canPushTile = false
-    displayExtraRoom(false)
+    lastPushedIndex = index
+    lastPushedDir = dir
+
+    displayExtraRoom()
 }
 
 //UTILITY #########################################################################
