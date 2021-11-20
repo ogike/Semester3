@@ -4,6 +4,12 @@
     /* height: auto; */
 }
 
+/*TODO: FLEXBOXAL NORMÁLISRA CSINÁLNI */
+/* #gameboard_div{
+    display: flex;
+    justify-content: flex-start;
+} */
+
 .board_div{
     display: inline-block;
     position: relative;

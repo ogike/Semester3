@@ -34,9 +34,12 @@ let room_t = {
             true,   //bottom
             false], //left
     rotation: 0,
+    curPosX: 0,
+    curPosY: 0,
+    isAccessible: false,
     hasTreasure: -1 //indicates which players treasure is here
-                     //-1 if none
-                     //-2 if impossible (corrner pieces)
+                     // -1 if none
+                     // -2 if impossible (corrner pieces)
 }
 
 let room_corner = {
@@ -47,6 +50,9 @@ let room_corner = {
             true,   //bottom
             true],  //left
     rotation: 0,
+    curPosX: 0,
+    curPosY: 0,
+    isAccessible: false,
     hasTreasure: -1
 }
 
@@ -58,6 +64,9 @@ let room_straight = {
             false,  //bottom
             true],  //left
     rotation: 0,
+    curPosX: 0,
+    curPosY: 0,
+    isAccessible: false,
     hasTreasure: -1
 }
 

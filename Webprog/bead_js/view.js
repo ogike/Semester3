@@ -59,8 +59,14 @@ function drawPlayerOnPos(player){
     let tdPos = getCenterOfTd(td)
     let img = playerImgs[player.id]
 
-    img.style.left = `${tdPos.x - playerSizeW/2}px`
-    img.style.top  = `${tdPos.y - playerSizeH/2}px`
+    let finalX = tdPos.x - playerSizeW/2
+    let finalY = tdPos.y - playerSizeW/2
+
+    //TODO next: playerek eltolása ha van szobán már egy játékos
+    //elképzelés: player számtól függően 4 quadron, playerID alapján beálltjuk
+
+    img.style.left = `${finalX}px`
+    img.style.top  = `${finalY}px`
 }
 
 function generatePlayerInfoLabels(){
@@ -121,16 +127,17 @@ function displayTreasure(playerI){
         return
     }
     
-    let coords = treasures[playerI][0]
+    let coordX = treasures[playerI][0].curPosX
+    let coordY = treasures[playerI][0].curPosY
     let td
 
-    if(coords.x < 0 || coords.x >= boardSize || coords.y < 0 || coords.y >= boardSize){
+    if(coordX < 0 || coordX >= boardSize || coordY < 0 || coordY >= boardSize){
         //if the treasure is on the extra room
         td = table.rows[boardSize+1].cells[boardSize+1]
     }
     else{
         //if the treasure is in the table
-        td   = table.rows[coords.y+1].cells[coords.x+1]
+        td   = table.rows[coordY+1].cells[coordX+1]
     }
     
     let newPos = getCenterOfTd(td)
@@ -217,8 +224,21 @@ function refreshTdImg(x, y){
 }
 
 /**
- * @param {*} td the td inside the table
- * @param {*} absolute do we count the arrow rows/colums too?
+ * Toggles the accesibility on the relevant rooms
+ * @param {boolean} active Activate the filter, or remove it?
+ */
+function toggleAccesibleRooms(active = true){
+    accesibleRooms.forEach(room => {
+        let td = table.rows[room.curPosY+1].cells[room.curPosX+1]
+        let img = td.children[0]
+
+        img.style.filter = (active) ? 'saturate(500%) hue-rotate(320deg)' : ''
+    })
+}
+
+/**
+ * @param {HTMLElement} td the td inside the table
+ * @param {boolean} absolute do we count the arrow rows/colums too?
  * @returns with indexes x and y
  */
 function getXyCoords(td, absolute = false) {
