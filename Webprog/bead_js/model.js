@@ -1,7 +1,7 @@
 let boardSize = 7
 let rooms = [] //room matrix, [rows[rooms]]
 let extraRoom //the room that we can slide in
-let numOfPlayers = 2 //TODO: remove hardcode
+let numOfPlayers = 4 //TODO: remove hardcode
 let numOfTreasures= 2 //per player
 let players = []
 // let treasures = [/*per player*/[/*{x, y, isInExtraRoom}*/]] //TODO ugly comment
@@ -75,6 +75,7 @@ function newGame(){
     generateBoardGUI()
 
     //setting the players
+    players = []
     for (let i = 0; i < numOfPlayers; i++) {
         newPlayer = getDeepCopy(player)
         newPlayer.id = i
@@ -121,6 +122,7 @@ function newGame(){
 
 function moveCurPlayerToXy(x, y){
     if(hasGameFinished) return
+    if(canPushTile)     return //először a katakombát kell átalakítani
 
     let curPlayer = players[curPlayerI]
 
@@ -175,6 +177,8 @@ function isOpenToEachOther(x1, y1, x2, y2){
         || x1 >= boardSize || y1 >= boardSize
         || x2 >= boardSize || y2 >= boardSize )
         return false
+
+    //console.log()
 
     let room1 = rooms[y1][x1]
     let room2 = rooms[y2][x2]
@@ -254,8 +258,15 @@ function pushRoomIntoTable(index, dir){
                (dir == 0 && lastPushedDir == 2) 
             || (dir == 2 && lastPushedDir == 0)
             || (dir == 1 && lastPushedDir == 3)
-            || (dir == 3 && lastPushedDir == 1) ) )
+            || (dir == 3 && lastPushedDir == 1) ) ){
+        //TODO: label on ui
+        console.log('Nem lehet visszacsiálni az előző játékos lépését!')
         return
+    }
+
+    //Ha eltolnánk egy szobát, ami a accesible, annak a kép filterét deaktiválni kell
+        //mielőtt elcsúszan az img-room kapcsolat
+    toggleAccesibleRooms(false)
 
     switch (dir) {
         case 0: //push into row from left
@@ -276,22 +287,6 @@ function pushRoomIntoTable(index, dir){
                     pl.posX = (pl.posX+1) % boardSize
                     drawPlayerOnPos(pl)
                 }
-
-                //miért nem jó ez?: 
-                    //ha elmozgatunk egy új helyre egy kincses szobát,
-                    // akkor a következő kincs még lehet ugyan azon a helyen
-                    //mivel a kincsek nem szobához, hanem koordinátához vannak kötve
-                //megoldás:
-                    //újraírni úgy, hogy treasure-ök tömb:
-                    //   koordináták helyett a szobához vezető referenciát tárol
-                    //innen ugyanúgy lehet majd koordinátákat checkelni, ha:
-                    //   szobában is számon tartjuk a jelenlegi koordinátát
-                    //   vagy csinálunk egy függvényt ami visszaadja a koordinátáját
-                    //      kéne hozzá: szobák egyenlőség vizsgálata?
-                    //          Strictly objectre mutató pointereket hasonlítja össze
-                    //          even after swapping the pointers in the array
-
-
             });
             break;
 
@@ -394,15 +389,50 @@ function calcAccesibleRooms(){
     let plY = players[curPlayerI].posY
     let toTestXs = [plX+1, plX-1, plX,   plX]
     let toTestYs = [plY,   plY,   plY+1, plY-1]
-    
+    let startI = 0
+    let numAdded = 0 //number of rooms added to the array
+
     for (let i = 0; i < 4; i++) {
         if(isOpenToEachOther(plX, plY, toTestXs[i], toTestYs[i])){
+            numAdded++
             accesibleRooms.push(rooms[ toTestYs[i] ][ toTestXs[i] ])
             rooms[ toTestYs[i] ][ toTestXs[i] ].isAccessible = true
         }
     }
+
+    if(numAdded > 0){
+        calcAccesibleRoomsHelper(0, numAdded)
+    } else{
+        accesibleRooms.push(rooms[ plY ][ plX ])
+        rooms[ plY ][ plX ].isAccessible = true
+    }
     
     toggleAccesibleRooms(true)
+}
+
+function calcAccesibleRoomsHelper(startI, endI){
+    let numAdded = 0 //number of rooms added to the array
+
+    for(let i = startI; i < endI; i++){
+        let curX = accesibleRooms[i].curPosX
+        let curY = accesibleRooms[i].curPosY
+        let toTestXs = [curX+1, curX-1, curX,   curX  ]
+        let toTestYs = [curY,   curY,   curY+1, curY-1]
+
+        for (let i = 0; i < 4; i++) {
+            if(isOpenToEachOther(curX, curY, toTestXs[i], toTestYs[i])){
+                let newRoom = rooms[ toTestYs[i] ][ toTestXs[i] ]
+                if(!accesibleRooms.includes(newRoom)){
+                    numAdded++
+                    accesibleRooms.push(newRoom)
+                    newRoom.isAccessible = true
+                }
+            }
+        }
+    }
+
+    if(numAdded > 0)
+        calcAccesibleRoomsHelper(endI, endI+numAdded)
 }
 
 //UTILITY #########################################################################

@@ -1,33 +1,47 @@
-/**
- * @param {*} szulo: fő kezelő
- * @param {*} gyerek amire kattintunk/delegálunk (css selector, pl.: 'li')
- * @param {*} mikor esemény amire reagálunk (pl.: 'click', és még sok más) 
- * @param {*} mit (event, mireKattintottunk): fgv amit hívunk
- */
-function delegal(szulo, gyerek, mikor, mit){
-    function esemenyKezelo(esemeny){
-        let esemenyCelja    = esemeny.target;
-        let esemenyKezeloje = this; //szulo
-        let legkozelebbiKeresettElem = esemenyCelja.closest(gyerek);
+//TEMP automatically gen on refresh
+//requestAnimationFrame(newGame)
 
-        if(esemenyKezeloje.contains(legkozelebbiKeresettElem)){
-            mit(esemeny, legkozelebbiKeresettElem);
-        }
-    }
-    szulo.addEventListener(mikor, esemenyKezelo);
-}
 
+// STARTING SCREEN ############################################################
+
+let playersSelect = document.querySelector('#numOfPlayersSelect')
+let treasuresSelect = document.querySelector('#numOfTreasureSelect')
 
 //newGame will call displayBoard in the view too
-document.querySelector('#startBtn').addEventListener('click', newGame)
+document.querySelector('#startBtn').addEventListener('click', () => {
+    numOfPlayers = parseInt( playersSelect.value )
+    numOfTreasures = parseInt( treasuresSelect.value )
 
-//TEMP automatically gen on refresh
-requestAnimationFrame(newGame)
+    if(numOfTreasures > 24/numOfPlayers)
+        numOfTreasures = 24/numOfPlayers
+
+    newGame()
+})
+
+playersSelect.addEventListener('input', () => {
+    let playersValue = parseInt(playersSelect.value)
+    let treasuresValue = parseInt(treasuresSelect.value)
+    let maxNumOfTreasures = 24/playersValue
+
+    let selects = treasuresSelect.children
+    
+    for(let i = 0; i < 24; i++){
+        if(i < maxNumOfTreasures){
+            selects[i].disabled = false
+        } else{
+            selects[i].disabled = true
+        }
+    }
+})
 
 document.querySelector('#descBtn').addEventListener('click', showDescription)
 
+
+// INGAME EVENTS ##############################################################
+
 document.querySelector('#endTurnBtn').addEventListener('click', (event) => {
     if(hasGameFinished) return
+    if(canPushTile)     return //muszáj csúsztatni szobát a körödben
     endTurn();
 })
 
@@ -37,6 +51,20 @@ function roomClicked(event){
     let roomCoords = getXyCoords(event.target.parentElement)
     moveCurPlayerToXy(roomCoords.x, roomCoords.y)
 }
+
+//delegating when clicking on treasure/player-icons
+function playerIconClicked(event){
+    let id = parseInt(event.target.dataset.id)
+    moveCurPlayerToXy(players[id].posX, players[id].posY)
+}
+
+function treasureIconClicked(event){
+    let id = parseInt(event.target.dataset.id)
+    moveCurPlayerToXy(treasures[id][0].curPosX, treasures[id][0].curPosY)
+}
+
+
+// ARROW EVENTS ###############################################################
 
 function arrowPressedLeftClick(event){
     if(hasGameFinished) return
@@ -114,3 +142,10 @@ function arrowPressedRightClick(event){
         displayExtraRoom()
     }
 }
+
+
+// WIN SCREEN EVENTS ##########################################################
+document.querySelector('#restartBtn').addEventListener('click', () => {
+    document.querySelector('#gameboard_div').classList.add('hidden')
+    document.querySelector('#startScreen').classList.remove('hidden')
+})

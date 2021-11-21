@@ -1,6 +1,15 @@
+#title{
+    font-size: 2em;
+    font-weight: bold;
+    margin: auto;
+    text-align: center;
+    
+}
+
 .option_div{
     display: inline-block;
-    width: 150px;
+    width: auto;
+    padding-right: 1em;
     /* height: auto; */
 }
 
@@ -99,7 +108,10 @@ td button img{
     height: 10px;
 }
 
-#winText{
+/* #winscreen{
     display: none;
+} */
+
+#winText{
     font-size: 2em;
 }

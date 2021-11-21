@@ -1,14 +1,15 @@
 let table
 let nextPlayerLabel = document.querySelector('#nextPlayerLabel') //maybe dirty to set it here?
 let lastSelectedArrow //REFACTOR maybe should be in controller
-let playerImgs
-let treasureImgs
-let playerScoreLabels
+let playerImgs = []
+let treasureImgs = []
+let playerScoreLabels = []
 let extraRoomImg
 
 const tileSizePx = 40
 const playerSizeW = 7
 const playerSizeH = 13
+const playerPosPadding = 2 //for when there are multiple players on 1 tile
 const treasureSizeWH = 10
 
 //GAME INFO STUFF #############################################################
@@ -24,11 +25,7 @@ function displayExtraRoom(){
     extraRoomImg.src = extraRoom.source
     extraRoomImg.style.transform = `rotate(${extraRoom.rotation}deg)`
 
-    if(canPushTile){
-        extraRoomImg.style.filter = ""
-    } else{
-        extraRoomImg.style.filter = "grayscale(100%)"
-    }
+    extraRoomImg.style.filter = (canPushTile) ? "" : "grayscale(100%)"
 }
 
 function displayNextPlayer(){
@@ -43,6 +40,8 @@ function generatePlayerIcons(){
         let img = document.createElement('img')
         img.classList.add('playerImg')
         img.src = playerImgSources[pl.id]
+        img.dataset.id = pl.id
+        img.addEventListener('click', playerIconClicked)
         return img
     })
 
@@ -51,19 +50,57 @@ function generatePlayerIcons(){
     players.forEach((pl) => drawPlayerOnPos(pl))
 }
 
-function drawPlayerOnPos(player){
-    //set room.dataset.playersHere++
-    let room = rooms[player.posX, player.posY]
-
+function drawPlayerOnPos(player, recursive = false){
     let td   = table.rows[player.posY+1].cells[player.posX+1]
     let tdPos = getCenterOfTd(td)
     let img = playerImgs[player.id]
 
     let finalX = tdPos.x - playerSizeW/2
-    let finalY = tdPos.y - playerSizeW/2
+    let finalY = tdPos.y - playerSizeH/2
 
-    //TODO next: playerek eltolása ha van szobán már egy játékos
-    //elképzelés: player számtól függően 4 quadron, playerID alapján beálltjuk
+
+    //checking if there are any other players on this tile
+    let othersOnTile = players.filter(other => other != player 
+                                && player.posX == other.posX
+                                && player.posY == other.posY   )
+    let hasTreasure = false
+    treasures.forEach((treasurePerPlayer => {
+        curTr = treasurePerPlayer[0]
+        if(curTr){
+            if(curTr.curPosX == player.posX && curTr.curPosY == player.posY)
+                hasTreasure = true
+        }
+    }))
+    
+    if(othersOnTile.length > 0 || hasTreasure){
+
+        //repositioning the other in case they were on center
+        if(!recursive)
+            othersOnTile.forEach(other => drawPlayerOnPos(other, true))
+
+        //player számtól függően 4 quadronba helyezzük őket
+        switch (player.id) {
+            case 0: //top left
+                finalX -= playerSizeW/2 + playerPosPadding
+                finalY -= playerSizeH/2 + playerPosPadding
+                break;
+            case 1: //top right
+                finalX += playerSizeW/2 + playerPosPadding
+                finalY -= playerSizeH/2 + playerPosPadding
+                break;
+            case 2: //bottom left
+                finalX -= playerSizeW/2 + playerPosPadding
+                finalY += playerSizeH/2 + playerPosPadding
+                break;
+            case 3: //bottom right
+                finalX += playerSizeW/2 + playerPosPadding
+                finalY += playerSizeH/2 + playerPosPadding
+                break;
+            default:
+                console.error('This is impossible.')
+                break;
+        }
+    }
 
     img.style.left = `${finalX}px`
     img.style.top  = `${finalY}px`
@@ -72,7 +109,10 @@ function drawPlayerOnPos(player){
 function generatePlayerInfoLabels(){
     let descDiv = document.querySelector("#info_div")
 
+    //resetting from last game
+    playerScoreLabels.forEach(label => label.remove())
     playerScoreLabels = []
+    
     players.forEach( (pl) => {
         let newLabel = document.createElement('p')
         newLabel.id = `player${pl.id}ScoreLabel`
@@ -98,10 +138,18 @@ function playerFoundAllTreasures(playerI){
 
 function displayPlayerWin(playerI){
     let winLabel = document.querySelector('#winText')
-    winLabel.style.display = 'block'
+    // winLabel.style.display = 'block'
+    document.querySelector('#winscreen').classList.remove('hidden')
     winLabel.innerText = `Congratulations, player ${playerI+1} won!`
     playerScoreLabels[playerI].innerText = `Player ${playerI+1}'s score: ${numOfTreasures}, just won!`
+
     //TODO: fancy graying out/etc
+
+    //we have to redrwa all the players/treasures mert a winLabel elcsúsztatja őket
+    // players.forEach(pl => {
+    //     drawPlayerOnPos(pl)
+    //     displayTreasure(pl.id)
+    // })
 }
 
 
@@ -112,6 +160,8 @@ function generateTreasureIcons(){
         let img = document.createElement('img')
         img.classList.add('treasureImg')
         img.src = treasureImgSources[pl.id]
+        img.dataset.id = pl.id
+        img.addEventListener('click', treasureIconClicked)
         table.appendChild(img)
         return img
     })
@@ -148,13 +198,19 @@ function displayTreasure(playerI){
 
 //BOARD/ROOM STUFF ############################################################
 function generateBoardGUI(){
-    //TEMP removing existing board on new game
+    //hiding start screen
+    document.querySelector('#startScreen').classList.add('hidden')
+    document.querySelector('#winscreen').classList.add('hidden')
+
+    //removing existing board on new game
     let existingTable = document.querySelector('#mainTable')
-    if(existingTable) existingTable.remove()
+    if(existingTable)
+        existingTable.remove()
     lastSelectedArrow = null
 
     table = document.createElement('table')
     table.id = 'mainTable'
+    table.style.position = 'relative'
 
     //first arrow/empty row
     table.appendChild( createArrowRow(1) )
@@ -229,6 +285,9 @@ function refreshTdImg(x, y){
  */
 function toggleAccesibleRooms(active = true){
     accesibleRooms.forEach(room => {
+        if(room.curPosX < 0 || room.curPosY < 0)
+            return
+
         let td = table.rows[room.curPosY+1].cells[room.curPosX+1]
         let img = td.children[0]
 

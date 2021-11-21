@@ -8,39 +8,64 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="option_div"> <!-- TODO? should be radio btns? -->
-        <p>Hány játékos?</p>
-        <select size="4" name="numOfPlayers" id="numOfPlayersSelect">
-            <option value="1" >Egy</option>
-            <option value="2" selected>Kettő</option>
-            <option value="3" >Három</option>
-            <option value="4" >Négy</option>
-        </select>
-    </div>
-    <div class="option_div">
-        <!-- TODO: validation:  1-(24/játékosok száma)-->
-            <!-- js-ben generálódjon a játékosok beírása után -->
-        <p>Játékosonként hány kincs?</p>
-        <select size="3" name="numOfTreasure" id="numOfTreasureSelect">
-            <option value="1">Egy</option>
-            <option value="2" selected>Kettő</option>
-            <option value="3">Három</option>
-            <option value="4">Négy</option>
-            <option value="5">Öt</option>
-            <option value="6">Hat</option>
-        </select>
+    <p id="title">Varázslatos katakomba</p>
+    <hr>
+
+    <div id="startScreen">
+        <div class="option_div"> <!-- TODO? should be radio btns? -->
+            <p>Hány játékos?</p>
+            <select size="4" name="numOfPlayers" id="numOfPlayersSelect">
+                <option value="1" >Egy</option>
+                <option value="2" selected>Kettő</option>
+                <option value="3" >Három</option>
+                <option value="4" >Négy</option>
+            </select>
+        </div>
+        <div class="option_div">
+            <!-- TODO: validation:  1-(24/játékosok száma)-->
+                <!-- js-ben generálódjon a játékosok beírása után -->
+            <p>Játékosonként hány kincs?</p>
+            <select size="3" name="numOfTreasure" id="numOfTreasureSelect">
+                <option value="1">Egy</option>
+                <option value="2" selected>Kettő</option>
+                <option value="3">Három</option>
+                <option value="4">Négy</option>
+                <option value="5">Öt</option>
+                <option value="6">Hat</option>
+                <option value="7">Hét</option>
+                <option value="8">Nyolc</option>
+                <option value="9">Kilenc</option>
+                <option value="10">Tíz</option>
+                <option value="11">Tizenegy</option>
+                <option value="12">Tizenkettő</option>
+                <option value="13">Tizenhárom</option>
+                <option value="14">Tizennégy</option>
+                <option value="15">Tizenöt</option>
+                <option value="16">Tizenhat</option>
+                <option value="17">Tizenhét</option>
+                <option value="18">Tizennyolc</option>
+                <option value="19">Tizenkilenc</option>
+                <option value="20">Húsz</option>
+                <option value="21">Huszonegy</option>
+                <option value="22">Huszonkettő</option>
+                <option value="23">Huszonhárom</option>
+                <option value="24">Huszonnégy</option>
+            </select>
+        </div>
+    
+        <div class="option_div">
+            <button id="startBtn">Új játék kezdése</button>
+            <button id="descBtn">Játék leírása</button>
+        </div>
     </div>
 
-    <div class="option_div">
-        <button id="startBtn">Új játék kezdése</button>
-        <button id="descBtn">Játék leírása</button>
-    </div>
-
-    <!-- this is stupid id/class naming. -->
     <div class="hidden" id="gameboard_div">
         <hr>
         <div class="board_div" id="table_div">
-            <p id="winText">Player won!</p>
+            <div id="winscreen" class="hidden">
+                <p id="winText">Player won!</p>
+                <button id="restartBtn">Start new game</button>
+            </div>
         </div>
 
         <div class="board_div" id="info_div">
@@ -69,7 +94,7 @@
 </body>
 
 <script src="model.js"></script>
-<script src="rooms.js"></script>
+<script src="data.js"></script>
 <script src="view.js"></script>
 <script src="controller.js"></script>
 

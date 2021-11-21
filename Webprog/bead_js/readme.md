@@ -1,6 +1,3 @@
-Notes:
-
-
 Tasi Zoltán György
 HM37UQ
 Webprogramozás - számonkérés
@@ -26,8 +23,8 @@ Minimálisan teljesítendő (enélkül nem fogadjuk el, 8 pont)
 
 Az alap feladatok (12 pont)
 
-[ ] Kezdőképernyő: játékosszám beállítása (0,5 pont)
-[ ] Kezdőképernyő: játékosonkénti kincskártyák számának beállítása (0,5 pont)
+[x] Kezdőképernyő: játékosszám beállítása (0,5 pont)
+[x] Kezdőképernyő: játékosonkénti kincskártyák számának beállítása (0,5 pont)
 [x] Kezdőképernyő: Start gombra megjelenik a játéktér (0,5 pont)
 [x] Kezdőképernyő: megtekinthető a játékleírás (0,5 pont)
 [x] Játéktér: a kincsek a beállításoknak megfelelően jelennek meg (0,5 pont)
@@ -43,13 +40,13 @@ Az alap feladatok (12 pont)
 [ ] Lépés: a lépés animációval történik (1 pont)
 [x] Lépés: ha elérendő kincskártyára lépünk, akkor a játékos adatlapja helyesen változik (0,5 pont)
 [x] Lépés: ha minden kincs megvan, és a kiindulási pontra léptünk, akkor a játék vége van (0,5 pont)
-[ ] Lépés: több figura jól jelenik meg egy mezőn (0,5 pont)
+[x] Lépés: több figura jól jelenik meg egy mezőn (0,5 pont)
 [x] Vége: a győztes játékos száma megjelenik (0,5 pont)
-[ ] Vége: egy gombra kattintva a játék újrakezdhető a kezdőképernyőtől (0,5 pont)
+[x] Vége: egy gombra kattintva a játék újrakezdhető a kezdőképernyőtől (0,5 pont)
 [ ] Egyéb: Igényes kialakítás (1 pont)
 
 Plusz feladatok (plusz 5 pont)
 
-[ ] Lépés: minden elérhető szoba jelölése (3 pont)
+[x] Lépés: minden elérhető szoba jelölése (3 pont)
 [ ] Mentés: játék közben egy gombra kattintva elmenthető az aktuális állapot (0,5 pont)
 [ ] Mentés: a kezdőképernyőn megjelenő mentett állapot betölthető (1 pont)
