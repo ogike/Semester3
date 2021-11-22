@@ -43,7 +43,7 @@ Az alap feladatok (12 pont)
 [x] Lépés: több figura jól jelenik meg egy mezőn (0,5 pont)
 [x] Vége: a győztes játékos száma megjelenik (0,5 pont)
 [x] Vége: egy gombra kattintva a játék újrakezdhető a kezdőképernyőtől (0,5 pont)
-[ ] Egyéb: Igényes kialakítás (1 pont)
+[x] Egyéb: Igényes kialakítás (1 pont)
 
 Plusz feladatok (plusz 5 pont)
 

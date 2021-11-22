@@ -158,8 +158,8 @@ function moveCurPlayerToXy(x, y){
 function endTurn(){
     curPlayerI++
     curPlayerI %= numOfPlayers
-    displayNextPlayer()
     canPushTile = true
+    displayNextPlayer()
     displayExtraRoom()
     calcAccesibleRooms()
 }
@@ -367,6 +367,7 @@ function pushRoomIntoTable(index, dir){
     updateRoomCoords()
     displayExtraRoom()
     calcAccesibleRooms()
+    displayNextPlayer()
 
     //redrwaing the treasures in case we pushed a room with treasure in it
     players.forEach(pl => displayTreasure(pl.id))

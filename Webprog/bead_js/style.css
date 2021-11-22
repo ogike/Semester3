@@ -1,47 +1,4 @@
-#title{
-    font-size: 2em;
-    font-weight: bold;
-    margin: auto;
-    text-align: center;
-    
-}
-
-.option_div{
-    display: inline-block;
-    width: auto;
-    padding-right: 1em;
-    /* height: auto; */
-}
-
-/*TODO: FLEXBOXAL NORMÁLISRA CSINÁLNI */
-/* #gameboard_div{
-    display: flex;
-    justify-content: flex-start;
-} */
-
-.board_div{
-    display: inline-block;
-    position: relative;
-}
-
-/* #info_div{
-    position: relative;
-    top: 10%;
-} */
-
-/* TODO: WHY THE FUCK WONT THIS WORK */
-#info_div{
-    vertical-align: middle;
-}
-
-#extraRoomInfoImg{
-    width: 40px;
-    height: 40px;
-}
-
-select{
-    width: 100px;
-}
+/* GENERAL ############################################# */
 
 body{
     background-color: #483d8b;
@@ -52,8 +9,55 @@ p{
 }
 
 .hidden{
-    display: none;
+    display: none !important;
 }
+
+#title{
+    font-size: 2em;
+    font-weight: bold;
+    margin: auto;
+    text-align: center;  
+}
+
+
+/* STARTING A NEW GAME ############################## */
+
+.option_div{
+    display: inline-block;
+    width: auto;
+    padding-right: 1em;
+    /* height: auto; */
+}
+
+select{
+    width: 100px;
+    height: 200px;
+}
+
+
+/* GAME/BOARD STUFF ###################################### */
+
+#gameboard_div{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.board_div{
+    /* display: inline-block; */
+    position: relative;
+}
+
+#info_div{
+    vertical-align: middle;
+}
+
+#extraRoomInfoImg{
+    width: 40px;
+    height: 40px;
+}
+
+
+/* ROOMS ############################################# */
 
 table, td, tr, img{
     border-spacing: 0;
@@ -85,16 +89,14 @@ td button img{
     display: block;
 }
 
-/* .buttonTd{
-    margin: auto;
-    border: none;
-} */
-
 .arrowImg{
     width: 40px;
     height: 40px;
     margin: 0;
 }
+
+
+/* ICONS ########################################## */
 
 .playerImg{
     position: absolute;
@@ -108,9 +110,8 @@ td button img{
     height: 10px;
 }
 
-/* #winscreen{
-    display: none;
-} */
+
+/* WINSCREEN ##################################### */
 
 #winText{
     font-size: 2em;

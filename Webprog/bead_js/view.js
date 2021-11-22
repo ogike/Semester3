@@ -30,6 +30,11 @@ function displayExtraRoom(){
 
 function displayNextPlayer(){
     nextPlayerLabel.innerText = `Next up: Player ${curPlayerI+1}`
+    if(canPushTile){
+        nextPlayerLabel.innerText += ', place a tile!'
+    } else{
+        nextPlayerLabel.innerText += ', move your icon then end the turn!'
+    }
 }
 
 
@@ -257,6 +262,8 @@ function generateBoardGUI(){
 
     document.querySelector('#table_div').appendChild(table)
     document.querySelector('#gameboard_div').classList.remove('hidden')
+
+    document.querySelector('#numOfTreasuresLabel').innerText= `Number of treasures to collect: ${numOfTreasures}`
 }
 
 //gets a td to set its image properly, and optionally a room
