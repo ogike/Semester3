@@ -10,10 +10,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 }
 
-php_strip_whitespace
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
