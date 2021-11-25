@@ -1,5 +1,5 @@
 <?php 
-//ÉÉSŐ#########################################
+//ELSŐ#########################################
 // echo file_get_contents('test.txt');
 
 // file_put_contents('test.txt', 'Szöveg');
@@ -23,6 +23,10 @@
 //HARMADIK##########################################
 $data = json_decode(file_get_contents('data.json'));
 
+function deleteSong(){
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -37,18 +41,11 @@ $data = json_decode(file_get_contents('data.json'));
     <h1>Playlist</h1>
     <table>
         <tr>
-            <th>
-                Cím
-            </th>
-            <th>
-                Előadó
-            </th>
-            <th>
-                Kiadás éve
-            </th>
-            <th>
-                Play
-            </th>
+            <th>Cím</th>
+            <th>Előadó</th>
+            <th>Kiadás éve</th>
+            <th>Play</th>
+            <th>Delete</th>
         </tr>
 
         <?php foreach($data as $song): ?>
@@ -56,7 +53,10 @@ $data = json_decode(file_get_contents('data.json'));
                 <td><?=$song->title?></td>
                 <td><?=$song->artist?></td>
                 <td><?=$song->year?></td>
-                <td><a href="<?=$song->link?>"></a></td>
+                <td><a href="<?=$song->link?>">▶</a></td>
+                <td>
+                    <a href="deletemusic.php?toDelete=<?=$song->title?>">X</a>
+                </td>
             </tr>
         <?php endforeach ?>
     </table>
