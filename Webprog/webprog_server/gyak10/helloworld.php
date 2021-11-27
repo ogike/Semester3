@@ -5,6 +5,7 @@ $hibak=[];
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if(!isset($_POST['name'])){
         $hibak[] = 'Name not given!';
+    //php explode = js split
     }else if(count(explode(" ", $_POST['name'])) < 2){
         $hibak[] = 'Nem megfelelő név formátum!';
     }
@@ -19,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiiiiiiiii</title>
+    <title>Hello [name]</title>
 </head>
 <style>
     .hiba{
@@ -31,6 +32,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         <input name="name"><br>
         <button type="submit">Submit</button>
     </form>
+
+    <!-- ha hiba nélkül be lett küldve egy név -->
     <?php if(count($hibak) == 0 && $_SERVER['REQUEST_METHOD'] == 'POST'): ?>
         <p>Szia <b><?=$_POST['name']?></b>!</p>
     <?php else: ?>

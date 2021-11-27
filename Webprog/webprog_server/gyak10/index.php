@@ -36,23 +36,27 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 </style>
 <body>
 <ul>
-<?php if(isset($_GET['age']) && is_numeric($_GET['age'])):?>
-    <?php foreach($students as $student): ?>
-        <?php if($_GET['age'] == $student['age']): ?>
-            <li><?=$student['name']?> (<?=$student['age']?>)</li>
-        <?php endif ?>
-    <?php endforeach ?>
-<?php else: ?>
-    <?php foreach($students as $student): ?>
-            <li><?=$student['name']?> (<?=$student['age']?>)</li>
-    <?php endforeach ?>
-<?php endif ?>
+    <!-- ha meg van adva URL-ben az age, akkor az olyan age-ű elemeket írjuk ki -->
+    <?php if(isset($_GET['age']) && is_numeric($_GET['age'])):?>
+        <?php foreach($students as $student): ?>
+            <?php if($_GET['age'] == $student['age']): ?>
+                <li><?=$student['name']?> (<?=$student['age']?>)</li>
+            <?php endif ?>
+        <?php endforeach ?>
+    <!-- egyébként listázzunk ki minden tanulót -->
+    <?php else: ?>
+        <?php foreach($students as $student): ?>
+                <li><?=$student['name']?> (<?=$student['age']?>)</li>
+        <?php endforeach ?>
+        <p>Állítsd be a URL-ben hogy milyen age-e szűrjön! (pl ?age=20)</p>
+    <?php endif ?>
 </ul>
 
 <ul>
-<?php foreach($hibak as $hiba): ?>
-    <li class="hiba"><?=$hiba?></li>
-<?php endforeach ?>
+    <!-- Hibák kiírása -->
+    <?php foreach($hibak as $hiba): ?>
+        <li class="hiba"><?=$hiba?></li>
+    <?php endforeach ?>
 </ul>
 </body>
 </html>

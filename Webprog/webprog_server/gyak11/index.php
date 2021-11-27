@@ -23,10 +23,6 @@
 //HARMADIK##########################################
 $data = json_decode(file_get_contents('data.json'));
 
-function deleteSong(){
-
-}
-
 ?>
 
 <!DOCTYPE html>
