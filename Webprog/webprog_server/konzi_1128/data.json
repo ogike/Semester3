@@ -1,0 +1,52 @@
+[
+    {
+        "name" : "Keilani Tatupu",
+        "title" : "The Captain",
+        "affiliation" : "human"
+    },
+    {
+        "name" : "Arjun Singh",
+        "title" : "The First Mate",
+        "affiliation" : "human"
+    },
+    {
+        "name" : "Svetlana Gedroits",
+        "title" : "The Surgeon",
+        "affiliation" : "human"
+    },
+    {
+        "name" : "Jeanne Lafarge",
+        "title" : "The Engineer",
+        "affiliation" : "human"
+    },
+    {
+        "name" : "Jamie Snell",
+        "title" : "The Master-at-Arms",
+        "affiliation" : "human"
+    },
+    {
+        "name" : "William Bowleg",
+        "title" : "The Apprentice",
+        "affiliation" : "human"
+    },
+    {
+        "name" : "Beatrice Sharpe",
+        "title" : "The Mathematician",
+        "affiliation" : "human"
+    },
+    {
+        "name" : "Ishmael Marsh",
+        "title" : "The Exile",
+        "affiliation" : "hibrid"
+    },
+    {
+        "name" : "Edmund Mallory",
+        "title" : "The Jinx",
+        "affiliation" : "cultist"
+    },
+    {
+        "name" : "Samira Dualeh",
+        "title" : "The Stowaway",
+        "affiliation" : "hibrid"
+    }
+]
