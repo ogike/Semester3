@@ -117,7 +117,7 @@ $corpPercent  = floor( ($corporate/$totalNumber)   * 100 );
 //objektumon belül minden valtozo kiirasa (nagyon ronda)
 //var_dump($egyetemek);
 //szebben: 
-echo '<pre>', var_dump($egyetemek), '</pre>';
+//echo '<pre>', var_dump($egyetemek), '</pre>';
 
 //tömbhöz hozzáadás:
 $tomb = [];
@@ -143,7 +143,7 @@ $tomb[] = 'második elem';
             <th>Hallgatók száma</th>
         </tr>
         <?php foreach($egyetemek as $uni): ?>
-            <tr style="background-color: <?= $uni['allamzi'] ? 'orange' : 'pink'?>">
+            <tr style="background-color: <?= $uni['allami'] ? 'orange' : 'pink'?>">
                 <!-- Változó kiírása -->
                 <td><?=$uni['nev']?></td> 
 

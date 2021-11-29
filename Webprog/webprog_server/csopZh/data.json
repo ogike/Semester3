@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Powder",
+        "affiliation": "Zaun"
+    },
+    {
+        "name": "Ekko",
+        "affiliation": "Zaun"
+    },
+    {
+        "name": "Silco",
+        "affiliation": "Zaun"
+    },
+    {
+        "name": "Vander",
+        "affiliation": "Zaun"
+    },
+    {
+        "name": "Viktor",
+        "affiliation": "Zaun"
+    },
+    {
+        "name": "Jayce",
+        "affiliation": "Piltover"
+    },
+    {
+        "name": "Heimerdinger",
+        "affiliation": "Piltover"
+    },
+    {
+        "name": "Cupcake",
+        "affiliation": "Piltover"
+    },
+    {
+        "name": "Vi",
+        "affiliation": "Piltover"
+    }
+]
