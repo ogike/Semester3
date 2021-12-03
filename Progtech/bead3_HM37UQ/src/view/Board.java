@@ -7,13 +7,14 @@ import java.awt.Image;
 import java.io.IOException;
 import javax.swing.JPanel;
 import model.Game;
-import model.LevelItem;
+import model.Tile;
 import model.Position;
 import res.ResourceLoader;
 
 public class Board extends JPanel {
     private Game game;
-    private final Image box, box_in_place, destination, player, wall, empty;
+        //EXIT('E'), WALL('#'), EMPTY(' ');
+    private final Image exit, player, wall, empty;
     private double scale;
     private int scaled_size;
     private final int tile_size = 32;
@@ -22,9 +23,7 @@ public class Board extends JPanel {
         game = g;
         scale = 1.0;
         scaled_size = (int)(scale * tile_size);
-        box = ResourceLoader.loadImage("res/box.png");
-        box_in_place = ResourceLoader.loadImage("res/box_in_place.png");
-        destination = ResourceLoader.loadImage("res/destination.png");
+        exit = ResourceLoader.loadImage("res/destination.png");
         player = ResourceLoader.loadImage("res/player.png");
         wall = ResourceLoader.loadImage("res/wall.png");
         empty = ResourceLoader.loadImage("res/empty.png");
@@ -60,11 +59,9 @@ public class Board extends JPanel {
         for (int y = 0; y < h; y++){
             for (int x = 0; x < w; x++){
                 Image img = null;
-                LevelItem li = game.getItem(y, x);
+                Tile li = game.getItem(y, x);
                 switch (li){
-                    case BOX: img = box; break;
-                    case BOX_IN_PLACE: img = box_in_place; break;
-                    case DESTINATION: img = destination; break;
+                    case EXIT: img = exit; break;
                     case WALL: img = wall; break;
                     case EMPTY: img = empty; break;
                 }

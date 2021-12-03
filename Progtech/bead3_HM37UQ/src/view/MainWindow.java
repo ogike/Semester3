@@ -24,24 +24,20 @@ public class MainWindow extends JFrame{
     private Board board;
     private final JLabel gameStatLabel;    
     
-    public MainWindow() throws IOException{
+    public MainWindow() /*throws IOException */{
         //creating the model
         game = new Game();
         
         //setting the windows itself ####
-        setTitle("Sokoban");
+        setTitle("Labirintus ");
         setSize(600, 600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        URL url = MainWindow.class.getClassLoader().getResource("res/box.png");
+        URL url = MainWindow.class.getClassLoader().getResource("res/tmp_icon.jpg");
         setIconImage(Toolkit.getDefaultToolkit().getImage(url));
         
         //creating menubar #######################
         JMenuBar menuBar = new JMenuBar();
         JMenu menuGame = new JMenu("Játék");
-        JMenu menuGameLevel = new JMenu("Pálya");
-        JMenu menuGameScale = new JMenu("Nagyítás");
-        createGameLevelMenuItems(menuGameLevel);
-        createScaleMenuItems(menuGameScale, 1.0, 2.0, 0.5);
 
         //exit action ###################
         JMenuItem menuGameExit = new JMenuItem(new AbstractAction("Kilépés") {
@@ -50,14 +46,12 @@ public class MainWindow extends JFrame{
                 System.exit(0);
             }
         });
-
+        
         //adding menubar to window
-        menuGame.add(menuGameLevel);
-        menuGame.add(menuGameScale);
-        menuGame.addSeparator();
         menuGame.add(menuGameExit);
         menuBar.add(menuGame);
         setJMenuBar(menuBar);
+
         
         //adding the label
         setLayout(new BorderLayout(0, 10));
@@ -65,12 +59,14 @@ public class MainWindow extends JFrame{
         add(gameStatLabel, BorderLayout.NORTH);
         
         //adding the gameboard
-        try { 
-            add(board = new Board(game), BorderLayout.CENTER); 
-        } catch (IOException ex) {}
+        //try { 
+            //add(board = new Board(game), BorderLayout.CENTER); 
+        //} catch (IOException ex) {
+        //    System.out.println("ajajj");
+        //}
         
         //setting up keyboard input for the whole window
-        addKeyListener(new KeyAdapter() {
+        /*addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent ke) {
                 super.keyPressed(ke); 
@@ -92,62 +88,19 @@ public class MainWindow extends JFrame{
                     }
                 } 
             }
-        });
+        });*/
 
         //necessary last steps
         setResizable(false);
         setLocationRelativeTo(null);
-        game.loadGame(new GameID("EASY", 1));
-        board.refresh();
+        
+        //starting EASY 1
+        //game.loadGame(new GameID("EASY", 1));
+        //board.refresh();
+        
         pack();
-        refreshGameStatLabel();
+        //need to put proper timer here later
+        //refreshGameStatLabel();
         setVisible(true);
-    }
-    
-    private void refreshGameStatLabel(){
-        String s = "Lépések száma: " + game.getNumSteps();
-        s += ", dobozok a helyükön: " + game.getLevelNumBoxesInPlace() + "/" + game.getLevelNumBoxes();
-        gameStatLabel.setText(s);
-    }
-    
-    private void createGameLevelMenuItems(JMenu menu){
-        for (String s : game.getDifficulties()){
-            JMenu difficultyMenu = new JMenu(s);
-            menu.add(difficultyMenu);
-            for (Integer i : game.getLevelsOfDifficulty(s)){
-                JMenuItem item = new JMenuItem(new AbstractAction("Level-" + i) {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        game.loadGame(new GameID(s, i));
-                        board.refresh();
-                        pack();
-                    }
-                });
-                difficultyMenu.add(item);
-            }
-        }
-    }
-    
-    private void createScaleMenuItems(JMenu menu, double from, double to, double by){
-        while (from <= to){
-            final double scale = from;
-            JMenuItem item = new JMenuItem(new AbstractAction(from + "x") {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (board.setScale(scale)) pack();
-                }
-            });
-            menu.add(item);
-            
-            if (from == to) break;
-            from += by;
-            if (from > to) from = to;
-        }
-    }
-    
-    public static void main(String[] args) {
-        try {
-            new MainWindow();
-        } catch (IOException ex) {}
-    }    
+    }  
 }
