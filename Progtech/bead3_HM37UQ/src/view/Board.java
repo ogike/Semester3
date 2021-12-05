@@ -7,14 +7,16 @@ import java.awt.Image;
 import java.io.IOException;
 import javax.swing.JPanel;
 import model.Game;
-import model.Tile;
+import model.TileType;
 import model.Position;
 import res.ResourceLoader;
 
 public class Board extends JPanel {
+    private int fogOfWarDist = 3;
+    
     private Game game;
         //EXIT('E'), WALL('#'), EMPTY(' ');
-    private final Image exit, player, wall, empty;
+    private final Image exit, player, wall, empty, dragon, darkness;
     private double scale;
     private int scaled_size;
     private final int tile_size = 32;
@@ -27,6 +29,9 @@ public class Board extends JPanel {
         player = ResourceLoader.loadImage("res/player.png");
         wall = ResourceLoader.loadImage("res/wall.png");
         empty = ResourceLoader.loadImage("res/empty.png");
+        dragon = ResourceLoader.loadImage("res/dragon.png");
+        darkness = ResourceLoader.loadImage("res/darkness.png");
+        
     }
     
     public boolean setScale(double scale){
@@ -35,7 +40,7 @@ public class Board extends JPanel {
         return refresh();
     }
     
-    //resizes the windos and repaints
+    //resizes the window and repaints
     public boolean refresh(){
         if (!game.isLevelLoaded()) return false;
         Dimension dim = new Dimension(game.getLevelCols() * scaled_size, game.getLevelRows() * scaled_size);
@@ -54,19 +59,25 @@ public class Board extends JPanel {
         int w = game.getLevelCols();
         int h = game.getLevelRows();
         Position p = game.getPlayerPos();
+        Position d = game.getDragonPos();
         
         //iterating thru each cell on the board
         for (int y = 0; y < h; y++){
             for (int x = 0; x < w; x++){
                 Image img = null;
-                Tile li = game.getItem(y, x);
+                TileType li = game.getTile(y, x);
                 switch (li){
                     case EXIT: img = exit; break;
                     case WALL: img = wall; break;
                     case EMPTY: img = empty; break;
                 }
                 if (p.x == x && p.y == y) img = player;
+                if (d.x == x && d.y == y) img = dragon;
+                
+                if(p.eucledianDistance(x, y) > fogOfWarDist) img = darkness;
+                
                 if (img == null) continue;
+                
                 gr.drawImage(img, 
                         x * scaled_size, //x koord helye
                         y * scaled_size, //y koord helye

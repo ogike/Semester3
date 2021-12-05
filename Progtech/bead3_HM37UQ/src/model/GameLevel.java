@@ -3,84 +3,117 @@ package model;
 import java.util.ArrayList;
 
 public class GameLevel {
-    public final GameID        gameID;
-    public final int           rows, cols;
-    public final Tile[][] level;
-    public Position            player = new Position(0, 0);
-    private int                numBoxes, numBoxesInPlace, numSteps;
+    public final GameID     gameID;
+    public final int        rows, cols;
+    public final TileType[][]   level;
+    public Player           player = new Player();
+    public Dragon           dragon;
+    public Position         exitPos;
     
-    public GameLevel(ArrayList<String> gameLevelRows, GameID gameID){
+    private final Game      game;
+    
+    
+    /**
+     * Gets basically the relevant portion for levels.txt and loads it into a level model
+     * @param gameLevelRows The string representation of the level, line by line
+     * @param gameID The difficulty - gameNumber pair
+     */
+    public GameLevel(ArrayList<String> gameLevelRows, GameID gameID, Game game){
         this.gameID = gameID;
+        this.game = game;
+        
+        //getting the col of the widest line
         int c = 0;
         for (String s : gameLevelRows) if (s.length() > c) c = s.length();
+        
         rows = gameLevelRows.size();
         cols = c;
-        level = new Tile[rows][cols];
-        numBoxes = 0;
-        numBoxesInPlace = 0;
-        numSteps = 0;
+        level = new TileType[rows][cols];
         
         for (int i = 0; i < rows; i++){
             String s = gameLevelRows.get(i);
             for (int j = 0; j < s.length(); j++){
                 switch (s.charAt(j)){
-                    case 'P': player = new Position(j, i);
-                              level[i][j] = Tile.EMPTY; break;
-                    case '#': level[i][j] = Tile.WALL; break;
-                    case 'E': level[i][j] = Tile.EXIT; break;
-                    default:  level[i][j] = Tile.EMPTY; break;
+                    case 'P': player = new Player(new Position(j, i));
+                              level[i][j] = TileType.EMPTY; break;
+                              
+                    case '#': level[i][j] = TileType.WALL; break;
+                    
+                    case 'E': exitPos = new Position(j, i);
+                              level[i][j] = TileType.EXIT; break;
+                              
+                    case 'D': dragon = new DragonStupid( new Position(j, i), game );
+                              level[i][j] = TileType.EMPTY; break;
+                              
+                    default:  level[i][j] = TileType.EMPTY; break;
                 }
             }
             
             //padding the remainder of the row
             for (int j = s.length(); j < cols; j++){ 
-                level[i][j] = Tile.EMPTY;
+                level[i][j] = TileType.EMPTY;
             }
+        }
+        
+        if(dragon != null){
+            dragon.setTarget(player);
         }
     }
 
+    //copy constructor
     public GameLevel(GameLevel gl) {
         gameID = gl.gameID;
+        game = gl.game;
         rows = gl.rows;
         cols = gl.cols;
-        numBoxes = gl.numBoxes;
-        numBoxesInPlace = gl.numBoxesInPlace;
-        numSteps = gl.numSteps;
-        level = new Tile[rows][cols];
-        player = new Position(gl.player.x, gl.player.y);
+        level = new TileType[rows][cols];
+        player = new Player(gl.player);
+        dragon = gl.dragon.getDeepCopy();
+        dragon.setTarget(player);
+        exitPos = new Position(gl.exitPos.x, gl.exitPos.y);
         for (int i = 0; i < rows; i++){
             System.arraycopy(gl.level[i], 0, level[i], 0, cols);
         }
     }
 
+    /**
+     * @param p
+     * @return "Is this position in-bounds?"
+     */
     public boolean isValidPosition(Position p){
         return (p.x >= 0 && p.y >= 0 && p.x < cols && p.y < rows);
     }
     
+    /**
+     * @param p
+     * @return "Can the player move to this position?"
+     */
     public boolean isFree(Position p){
         if (!isValidPosition(p)) return false;
-        Tile li = level[p.y][p.x];
-        return (li == Tile.EMPTY || li == Tile.EXIT);
+        TileType li = level[p.y][p.x];
+        return (li == TileType.EMPTY || li == TileType.EXIT);
     }
     
-    /*public boolean movePlayer(Direction d){
-        Position curr = player;
-        Position next = curr.translate(d);
-        if (numBoxesInPlace < numBoxes && isFree(next)) {
-            player = next;
-            numSteps++;
+    public boolean movePlayer(Direction d){
+        Position currPos = player.getPos();
+        Position nextPos = currPos.translate(d);
+        if (isFree(nextPos)) {
+            player.setPos(nextPos);
             return true;
         } 
         return false;
-    }*/
+    }
 
-    
+    /**
+     * Honestly have no idea why this is here
+     */
     public void printLevel(){
-        int x = player.x, y = player.y;
+        int x = player.getPos().x;
+        int y = player.getPos().y;
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++){
                 if (i == y && j == x)
-                    System.out.print('@');
+                    System.out.print('P');
                 else 
                     System.out.print(level[i][j].representation);
             }

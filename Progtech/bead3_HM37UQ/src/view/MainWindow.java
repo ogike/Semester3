@@ -38,6 +38,8 @@ public class MainWindow extends JFrame{
         //creating menubar #######################
         JMenuBar menuBar = new JMenuBar();
         JMenu menuGame = new JMenu("Játék");
+        JMenu menuGameLevel = new JMenu("Pálya");
+        createGameLevelMenuItems(menuGameLevel);
 
         //exit action ###################
         JMenuItem menuGameExit = new JMenuItem(new AbstractAction("Kilépés") {
@@ -48,6 +50,7 @@ public class MainWindow extends JFrame{
         });
         
         //adding menubar to window
+        menuGame.add(menuGameLevel);
         menuGame.add(menuGameExit);
         menuBar.add(menuGame);
         setJMenuBar(menuBar);
@@ -55,52 +58,99 @@ public class MainWindow extends JFrame{
         
         //adding the label
         setLayout(new BorderLayout(0, 10));
-        gameStatLabel = new JLabel("label");
+        gameStatLabel = new JLabel("Timer goes here");
         add(gameStatLabel, BorderLayout.NORTH);
         
         //adding the gameboard
-        //try { 
-            //add(board = new Board(game), BorderLayout.CENTER); 
-        //} catch (IOException ex) {
-        //    System.out.println("ajajj");
-        //}
+        try { 
+            add(board = new Board(game), BorderLayout.CENTER); 
+        } catch (IOException ex) {
+            System.out.println("ajajj");
+        }
         
         //setting up keyboard input for the whole window
-        /*addKeyListener(new KeyAdapter() {
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent ke) {
                 super.keyPressed(ke); 
-                if (!game.isLevelLoaded()) return;
-                int kk = ke.getKeyCode();
-                Direction d = null;
-                switch (kk){
-                    case KeyEvent.VK_LEFT:  d = Direction.LEFT; break;
-                    case KeyEvent.VK_RIGHT: d = Direction.RIGHT; break;
-                    case KeyEvent.VK_UP:    d = Direction.UP; break;
-                    case KeyEvent.VK_DOWN:  d = Direction.DOWN; break;
-                    case KeyEvent.VK_ESCAPE: game.loadGame(game.getGameID());
-                }
-                refreshGameStatLabel();
-                board.repaint();
-                if (d != null && game.step(d)){
-                    if (game.getLevelNumBoxes() == game.getLevelNumBoxesInPlace()){
-                        JOptionPane.showMessageDialog(MainWindow.this, "Gratulálok! Nyertél!", "Gratulálok!", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } 
+                handleKeyPressed(ke);
             }
-        });*/
+        });
 
         //necessary last steps
         setResizable(false);
         setLocationRelativeTo(null);
         
         //starting EASY 1
-        //game.loadGame(new GameID("EASY", 1));
-        //board.refresh();
+        game.loadGame(new GameID("EASY", 1));
+        board.refresh();
         
         pack();
-        //need to put proper timer here later
+        //TODO: need to put proper timer here later
         //refreshGameStatLabel();
         setVisible(true);
-    }  
+    }
+    
+    private void handleKeyPressed(KeyEvent ke){
+        if (!game.isLevelLoaded()) return;
+        
+        int kk = ke.getKeyCode();
+        Direction d = null;
+        switch (kk){
+            case KeyEvent.VK_LEFT:  d = Direction.LEFT; break;
+            case KeyEvent.VK_RIGHT: d = Direction.RIGHT; break;
+            case KeyEvent.VK_UP:    d = Direction.UP; break;
+            case KeyEvent.VK_DOWN:  d = Direction.DOWN; break;
+            case KeyEvent.VK_ESCAPE: game.loadGame(game.getGameID());
+        }
+        //refreshGameStatLabel();
+        board.repaint();
+        
+        if(d != null && !game.checkWin() && !game.checkLoose()){
+            game.step(d);
+            
+            if(game.checkWin()){
+                showGameWonDialog();
+            } else if (game.checkLoose()){
+                showGameOverDialog();
+            }
+        }
+    }
+    
+    public void showGameWonDialog(){
+        JOptionPane.showMessageDialog(MainWindow.this, 
+                        "Gratulálok! Nyertél!", 
+                        "Gratulálok!", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                //execution only returns to here when the dialog btn is clicked
+                //TODO: should be next level, or check if game completed
+                    //(currently only freezes movement)
+    }
+    
+    public void showGameOverDialog(){
+        JOptionPane.showMessageDialog(MainWindow.this, 
+                        "Game over! Kezdj egy új játékot!", 
+                        "Game ovee!", 
+                        JOptionPane.INFORMATION_MESSAGE);
+        //TODO: actual game over
+    }
+    
+    private void createGameLevelMenuItems(JMenu menu){
+        for (String s : game.getDifficulties()){
+            JMenu difficultyMenu = new JMenu(s); //create new menu for difficulty
+            menu.add(difficultyMenu);
+            for (Integer i : game.getLevelsOfDifficulty(s)){
+                //create new item for Level inside difficulty
+                JMenuItem item = new JMenuItem(new AbstractAction("Level-" + i) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        game.loadGame(new GameID(s, i));
+                        board.refresh();
+                        pack();
+                    }
+                });
+                difficultyMenu.add(item);
+            }
+        }
+    }
 }
