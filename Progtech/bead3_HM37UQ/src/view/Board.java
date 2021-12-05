@@ -65,7 +65,7 @@ public class Board extends JPanel {
         for (int y = 0; y < h; y++){
             for (int x = 0; x < w; x++){
                 Image img = null;
-                TileType li = game.getTile(y, x);
+                TileType li = game.getTile(y, x).type;
                 switch (li){
                     case EXIT: img = exit; break;
                     case WALL: img = wall; break;

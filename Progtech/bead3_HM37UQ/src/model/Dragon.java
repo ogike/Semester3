@@ -35,7 +35,8 @@ public abstract class Dragon {
     }
     
     protected boolean isTileGood(Position pos){
-        return game.isTileFree(pos) && game.getTile(pos.y, pos.x) == TileType.EMPTY;
+        return game.isTileFree(pos) && 
+                game.getTile(pos.y, pos.x).type == TileType.EMPTY;
     }
     
     protected abstract Position calcNextPos();

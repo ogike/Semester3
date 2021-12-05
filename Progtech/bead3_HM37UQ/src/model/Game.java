@@ -56,12 +56,14 @@ public class Game {
         return gameLevels.get(difficulty).keySet();
     }
     
-    public boolean isLevelLoaded(){ return gameLevel != null; }
+    public boolean isLevelLoaded(){ 
+        return gameLevel != null && !checkWin() && !checkLoose(); 
+    }
     public GameID getGameID(){ return (gameLevel != null) ? gameLevel.gameID : null; }
     
     public int getLevelRows(){ return gameLevel.rows; }
     public int getLevelCols(){ return gameLevel.cols; }
-    public TileType getTile(int row, int col){ return gameLevel.level[row][col]; }
+    public Tile getTile(int row, int col){ return gameLevel.level[row][col]; }
     public boolean isTileFree(Position pos) { return gameLevel.isFree(pos); }
 
     public Position getPlayerPos(){ //MAKE IT ~IMMUTABLE
@@ -70,6 +72,10 @@ public class Game {
     
     public Position getDragonPos(){ //MAKE IT ~IMMUTABLE
         return gameLevel.dragon.getPos(); 
+    }
+    
+    public Position getNextStepFromPath(Position from, Position to){
+        return gameLevel.graph.getNextStepToTarget(from, to);
     }
     
     public boolean checkWin(){

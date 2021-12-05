@@ -5,12 +5,13 @@ import java.util.ArrayList;
 public class GameLevel {
     public final GameID     gameID;
     public final int        rows, cols;
-    public final TileType[][]   level;
+    public final Tile[][]   level;
     public Player           player = new Player();
     public Dragon           dragon;
     public Position         exitPos;
     
     private final Game      game;
+    public final PathFindingGraph graph;      
     
     
     /**
@@ -28,45 +29,49 @@ public class GameLevel {
         
         rows = gameLevelRows.size();
         cols = c;
-        level = new TileType[rows][cols];
+        level = new Tile[rows][cols];
         
         for (int i = 0; i < rows; i++){
             String s = gameLevelRows.get(i);
             for (int j = 0; j < s.length(); j++){
                 switch (s.charAt(j)){
                     case 'P': player = new Player(new Position(j, i));
-                              level[i][j] = TileType.EMPTY; break;
+                              level[i][j] = new Tile(TileType.EMPTY, i, j); break;
                               
-                    case '#': level[i][j] = TileType.WALL; break;
+                    case '#': level[i][j] = new Tile(TileType.WALL, i, j); break;
                     
                     case 'E': exitPos = new Position(j, i);
-                              level[i][j] = TileType.EXIT; break;
+                              level[i][j] = new Tile(TileType.EXIT, i, j); break;
                               
-                    case 'D': dragon = new DragonStupid( new Position(j, i), game );
-                              level[i][j] = TileType.EMPTY; break;
+                    case 'D': dragon = new DragonSmart( new Position(j, i), game );
+                              level[i][j] = new Tile(TileType.EMPTY, i, j); break;
                               
-                    default:  level[i][j] = TileType.EMPTY; break;
+                    default:  level[i][j] = new Tile(TileType.EMPTY, i, j); break;
                 }
             }
             
             //padding the remainder of the row
             for (int j = s.length(); j < cols; j++){ 
-                level[i][j] = TileType.EMPTY;
+                level[i][j] = new Tile(TileType.EMPTY, i, j);
             }
         }
         
         if(dragon != null){
             dragon.setTarget(player);
         }
+        graph = null; //we only set it once we actually start the map
     }
 
-    //copy constructor
+    /**
+     * Called when loading the level, to reset the level data
+     * @param gl 
+     */
     public GameLevel(GameLevel gl) {
         gameID = gl.gameID;
         game = gl.game;
         rows = gl.rows;
         cols = gl.cols;
-        level = new TileType[rows][cols];
+        level = new Tile[rows][cols];
         player = new Player(gl.player);
         dragon = gl.dragon.getDeepCopy();
         dragon.setTarget(player);
@@ -74,6 +79,7 @@ public class GameLevel {
         for (int i = 0; i < rows; i++){
             System.arraycopy(gl.level[i], 0, level[i], 0, cols);
         }
+        graph = new PathFindingGraph(this);
     }
 
     /**
@@ -90,7 +96,7 @@ public class GameLevel {
      */
     public boolean isFree(Position p){
         if (!isValidPosition(p)) return false;
-        TileType li = level[p.y][p.x];
+        TileType li = level[p.y][p.x].type;
         return (li == TileType.EMPTY || li == TileType.EXIT);
     }
     
@@ -115,7 +121,7 @@ public class GameLevel {
                 if (i == y && j == x)
                     System.out.print('P');
                 else 
-                    System.out.print(level[i][j].representation);
+                    System.out.print(level[i][j].type.representation);
             }
             System.out.println("");
         }
