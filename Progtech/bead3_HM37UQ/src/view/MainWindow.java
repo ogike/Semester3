@@ -3,17 +3,20 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import model.Direction;
 import model.Game;
@@ -23,6 +26,17 @@ public class MainWindow extends JFrame{
     private final Game game;
     private Board board;
     private final JLabel gameStatLabel;    
+    
+    private final JButton shootUpBtn;
+    private final JButton shootDownBtn;
+    private final JButton shootLeftBtn;
+    private final JButton shootRightBtn;
+    
+    public static void main(String[] args) {
+        //try {
+            new MainWindow();
+        //} catch (IOException ex) {}
+    }
     
     public MainWindow() /*throws IOException */{
         //creating the model
@@ -55,11 +69,27 @@ public class MainWindow extends JFrame{
         menuBar.add(menuGame);
         setJMenuBar(menuBar);
 
+        //top panel(timer and shoot btns inside)
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BorderLayout());
         
-        //adding the label
-        setLayout(new BorderLayout(0, 10));
+        //adding the time label
+        //TODO: whats going on with the numbers
+        setLayout(new BorderLayout());
         gameStatLabel = new JLabel("Timer goes here");
-        add(gameStatLabel, BorderLayout.NORTH);
+        topPanel.add(gameStatLabel, BorderLayout.WEST);
+//        add(gameStatLabel, BorderLayout.NORTH);
+        
+        //adding the shoot button
+        JPanel shootPanel = new JPanel();
+        shootPanel.setLayout(new BorderLayout());
+        shootLeftBtn = addShootBtn(Direction.LEFT, shootPanel);
+        shootUpBtn = addShootBtn(Direction.UP, shootPanel);
+        shootDownBtn = addShootBtn(Direction.DOWN, shootPanel);
+        shootRightBtn = addShootBtn(Direction.RIGHT, shootPanel);
+        topPanel.add(shootPanel, BorderLayout.EAST);
+//        
+        add(topPanel, BorderLayout.NORTH);
         
         //adding the gameboard
         try { 
@@ -89,6 +119,10 @@ public class MainWindow extends JFrame{
         //TODO: need to put proper timer here later
         //refreshGameStatLabel();
         setVisible(true);
+        
+        //TODO: this fucks up a lot of stuff
+        setFocusable(true);
+        setLocationRelativeTo(null);
     }
     
     private void handleKeyPressed(KeyEvent ke){
@@ -115,6 +149,10 @@ public class MainWindow extends JFrame{
                 showGameOverDialog();
             }
         }
+    }
+    
+    private void handleShootBtnPressed(Direction dir){
+        //TODO
     }
     
     public void showGameWonDialog(){
@@ -152,5 +190,35 @@ public class MainWindow extends JFrame{
                 difficultyMenu.add(item);
             }
         }
+    }
+    
+    private JButton addShootBtn(Direction dir, JPanel panel){
+        JButton btn = new JButton();
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleShootBtnPressed(dir);
+            }
+        });
+        
+        switch(dir) {
+            case UP:
+                btn.setText("Up");
+                panel.add(btn, BorderLayout.NORTH);
+                break;
+            case DOWN:
+                btn.setText("Down");
+                panel.add(btn, BorderLayout.CENTER);
+                break;
+            case LEFT:
+                btn.setText("Left");
+                panel.add(btn, BorderLayout.WEST);
+                break;
+            case RIGHT:
+                btn.setText("Right");
+                panel.add(btn, BorderLayout.EAST);
+                break;
+        }
+        return btn;
     }
 }
