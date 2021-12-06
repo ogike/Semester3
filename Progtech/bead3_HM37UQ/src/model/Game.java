@@ -41,7 +41,9 @@ public class Game {
     public boolean step(Direction d){
         boolean succesful = gameLevel.movePlayer(d);
         
-        if(succesful) gameLevel.dragon.step();
+        if(succesful){
+            gameLevel.dragon.step();
+        }
         
         return succesful;
     }

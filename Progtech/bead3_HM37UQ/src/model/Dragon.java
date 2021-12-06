@@ -10,18 +10,24 @@ package model;
 public abstract class Dragon {
     public Player target;
     public Position pos;
+    public boolean isDead;
     protected Game game;
 
     public Dragon(Position pos, Game game) {
         this.pos = pos;
         this.game = game;
+        isDead = false;
     }
     
     public void setTarget(Player target){ this.target = target; }
     
+    public void die(){
+        isDead = true;
+    }
+    
     public void step(){
         //we trust that calcNextDir gives us a valid, free position
-        pos = calcNextPos();;
+        if(!isDead) pos = calcNextPos();
     }
     
     public boolean isPlayerNeighbour(){

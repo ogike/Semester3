@@ -22,6 +22,7 @@ public class DragonSmart extends Dragon {
     public Dragon getDeepCopy() {
         DragonSmart copy = new DragonSmart(pos, game);
         copy.target = this.target;
+        copy.isDead = false;
         return copy;
     }
     

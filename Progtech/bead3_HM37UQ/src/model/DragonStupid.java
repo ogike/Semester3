@@ -62,6 +62,7 @@ public class DragonStupid extends Dragon {
     public Dragon getDeepCopy() {
         DragonStupid copy = new DragonStupid(pos, game);
         copy.target = this.target;
+        copy.isDead = false;
         return copy;
     }
     

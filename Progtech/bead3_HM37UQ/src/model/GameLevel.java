@@ -8,6 +8,7 @@ public class GameLevel {
     public final Tile[][]   level;
     public Player           player = new Player();
     public Dragon           dragon;
+    public Bullet           bullet;
     public Position         exitPos;
     
     private final Game      game;
@@ -80,6 +81,12 @@ public class GameLevel {
             System.arraycopy(gl.level[i], 0, level[i], 0, cols);
         }
         graph = new PathFindingGraph(this);
+    }
+    
+    public void stepBullet(){
+        if(bullet != null){
+            bullet.step();
+        }
     }
 
     /**
