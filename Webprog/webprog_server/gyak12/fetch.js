@@ -37,4 +37,4 @@ function refresh(adat){
     });
 }
 
-document.querySelector('#re').addEventListener('click', refresh) //TODO bef
+document.querySelector('#re').addEventListener('click', refresh) //TODO: bef

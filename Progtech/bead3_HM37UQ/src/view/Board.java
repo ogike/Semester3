@@ -16,7 +16,7 @@ public class Board extends JPanel {
     
     private Game game;
         //EXIT('E'), WALL('#'), EMPTY(' ');
-    private final Image exit, player, wall, empty, dragon, darkness;
+    private final Image exit, player, wall, empty, dragon, darkness, bullet;
     private double scale;
     private int scaled_size;
     private final int tile_size = 32;
@@ -31,7 +31,7 @@ public class Board extends JPanel {
         empty = ResourceLoader.loadImage("res/empty.png");
         dragon = ResourceLoader.loadImage("res/dragon.png");
         darkness = ResourceLoader.loadImage("res/darkness.png");
-        
+        bullet = ResourceLoader.loadImage("res/bullet.png");
     }
     
     public boolean setScale(double scale){
@@ -60,6 +60,7 @@ public class Board extends JPanel {
         int h = game.getLevelRows();
         Position p = game.getPlayerPos();
         Position d = game.getDragonPos();
+        Position b = game.getBulletPos();
         
         //iterating thru each cell on the board
         for (int y = 0; y < h; y++){
@@ -72,7 +73,8 @@ public class Board extends JPanel {
                     case EMPTY: img = empty; break;
                 }
                 if (p.x == x && p.y == y) img = player;
-                if (d.x == x && d.y == y) img = dragon;
+                if (d != null && d.x == x && d.y == y) img = dragon;
+                if (b != null && b.x == x && b.y == y) img = bullet;
                 
                 if(p.eucledianDistance(x, y) > fogOfWarDist) img = darkness;
                 

@@ -42,10 +42,19 @@ public class Game {
         boolean succesful = gameLevel.movePlayer(d);
         
         if(succesful){
+            gameLevel.stepBullet();
             gameLevel.dragon.step();
+            gameLevel.checkBullet();
         }
         
         return succesful;
+    }
+    
+    public void shootBullet(Direction d){
+        boolean succesful = gameLevel.shootBullet(d);
+        if(succesful){
+            gameLevel.dragon.step();
+        }
     }
     
     // ------------------------------------------------------------------------
@@ -73,7 +82,17 @@ public class Game {
     }
     
     public Position getDragonPos(){ //MAKE IT ~IMMUTABLE
-        return gameLevel.dragon.getPos(); 
+        if(gameLevel.dragon != null && gameLevel.dragon.isAlive())
+            return gameLevel.dragon.getPos();
+        return null;
+    }
+    
+    public Position getBulletPos(){
+        if(gameLevel.bullet != null){
+            System.out.println("drawing bullet");
+            return gameLevel.bullet.getPos();
+        }
+        return null;
     }
     
     public Position getNextStepFromPath(Position from, Position to){
@@ -85,7 +104,7 @@ public class Game {
     }
     
     public boolean checkLoose(){
-        return gameLevel.dragon.isPlayerNeighbour();
+        return gameLevel.dragon.isAlive && gameLevel.dragon.isPlayerNeighbour();
     }
     
     // ------------------------------------------------------------------------

@@ -1,14 +1,18 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +21,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import model.Direction;
 import model.Game;
@@ -27,10 +32,12 @@ public class MainWindow extends JFrame{
     private Board board;
     private final JLabel gameStatLabel;    
     
-    private final JButton shootUpBtn;
-    private final JButton shootDownBtn;
-    private final JButton shootLeftBtn;
-    private final JButton shootRightBtn;
+    private final JLabel shootUpBtn;
+    private final JLabel shootDownBtn;
+    private final JLabel shootLeftBtn;
+    private final JLabel shootRightBtn;
+    
+    private boolean isStepping = false;
     
     public static void main(String[] args) {
         //try {
@@ -41,6 +48,7 @@ public class MainWindow extends JFrame{
     public MainWindow() /*throws IOException */{
         //creating the model
         game = new Game();
+        isStepping = true;
         
         //setting the windows itself ####
         setTitle("Labirintus ");
@@ -87,9 +95,9 @@ public class MainWindow extends JFrame{
         shootUpBtn = addShootBtn(Direction.UP, shootPanel);
         shootDownBtn = addShootBtn(Direction.DOWN, shootPanel);
         shootRightBtn = addShootBtn(Direction.RIGHT, shootPanel);
-        topPanel.add(shootPanel, BorderLayout.EAST);
-//        
-        add(topPanel, BorderLayout.NORTH);
+        //topPanel.add(shootPanel, BorderLayout.EAST);    
+        //add(topPanel, BorderLayout.NORTH);
+        add(gameStatLabel, BorderLayout.NORTH);
         
         //adding the gameboard
         try { 
@@ -123,10 +131,13 @@ public class MainWindow extends JFrame{
         //TODO: this fucks up a lot of stuff
         setFocusable(true);
         setLocationRelativeTo(null);
+        isStepping = false;
     }
     
     private void handleKeyPressed(KeyEvent ke){
         if (!game.isLevelLoaded()) return;
+        if (isStepping){ System.out.println("Double stepping!"); return;}
+        isStepping = true;
         
         int kk = ke.getKeyCode();
         Direction d = null;
@@ -142,6 +153,7 @@ public class MainWindow extends JFrame{
         
         if(d != null && !game.checkWin() && !game.checkLoose()){
             game.step(d);
+            //board.repaint();
             
             if(game.checkWin()){
                 showGameWonDialog();
@@ -149,10 +161,15 @@ public class MainWindow extends JFrame{
                 showGameOverDialog();
             }
         }
+        
+        isStepping = false;
     }
     
     private void handleShootBtnPressed(Direction dir){
-        //TODO
+        if(!game.checkWin() && !game.checkLoose()){
+            game.shootBullet(dir);
+            board.repaint();
+        }
     }
     
     public void showGameWonDialog(){
@@ -163,6 +180,7 @@ public class MainWindow extends JFrame{
                 //execution only returns to here when the dialog btn is clicked
                 //TODO: should be next level, or check if game completed
                     //(currently only freezes movement)
+        //board.repaint();
     }
     
     public void showGameOverDialog(){
@@ -171,6 +189,7 @@ public class MainWindow extends JFrame{
                         "Game ovee!", 
                         JOptionPane.INFORMATION_MESSAGE);
         //TODO: actual game over
+        //board.repaint();
     }
     
     private void createGameLevelMenuItems(JMenu menu){
@@ -192,30 +211,32 @@ public class MainWindow extends JFrame{
         }
     }
     
-    private JButton addShootBtn(Direction dir, JPanel panel){
-        JButton btn = new JButton();
-        btn.addActionListener(new ActionListener() {
+    private JLabel addShootBtn(Direction dir, JPanel panel){
+        JLabel btn = new JLabel();
+        btn.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 handleShootBtnPressed(dir);
             }
         });
+        btn.setBorder(BorderFactory.createLineBorder(Color.black));
+        btn.setHorizontalAlignment( SwingConstants.CENTER );
         
         switch(dir) {
             case UP:
-                btn.setText("Up");
+                btn.setText(" Up ");
                 panel.add(btn, BorderLayout.NORTH);
                 break;
             case DOWN:
-                btn.setText("Down");
+                btn.setText(" Down ");
                 panel.add(btn, BorderLayout.CENTER);
                 break;
             case LEFT:
-                btn.setText("Left");
+                btn.setText(" Left ");
                 panel.add(btn, BorderLayout.WEST);
                 break;
             case RIGHT:
-                btn.setText("Right");
+                btn.setText(" Right ");
                 panel.add(btn, BorderLayout.EAST);
                 break;
         }

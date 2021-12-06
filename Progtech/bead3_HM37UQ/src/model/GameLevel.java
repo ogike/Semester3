@@ -8,7 +8,7 @@ public class GameLevel {
     public final Tile[][]   level;
     public Player           player = new Player();
     public Dragon           dragon;
-    public Bullet           bullet;
+    public Bullet           bullet; //TODO: should be a list for multiple possible bullets
     public Position         exitPos;
     
     private final Game      game;
@@ -83,10 +83,37 @@ public class GameLevel {
         graph = new PathFindingGraph(this);
     }
     
+    //move the bullet and see if there is something on the updated tile
     public void stepBullet(){
         if(bullet != null){
-            bullet.step();
+            boolean hit = bullet.step();
+            if(hit){
+                bullet = null; //basically destroy the bullet if we hit something
+            }
         }
+    }
+    
+    public void checkBullet(){
+        //check if there is already something on the bullets tile
+        if(bullet != null && bullet.checkCollision()) bullet = null; 
+    }
+    
+    /**
+     * 
+     * @param dir
+     * @return if we succesfully fired or not
+     */
+    public boolean shootBullet(Direction dir){
+        if(player.bulletsLeft <= 0) return false;
+        
+        Position bulletPos = player.getPos().translate(dir);
+        if(isFree(bulletPos)){
+            bullet = new Bullet(player.getPos(), dir, this);
+            player.bulletsLeft--;
+            stepBullet();
+            return true;
+        }
+        return false;
     }
 
     /**
