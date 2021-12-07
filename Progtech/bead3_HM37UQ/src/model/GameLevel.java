@@ -6,10 +6,12 @@ public class GameLevel {
     public final GameID     gameID;
     public final int        rows, cols;
     public final Tile[][]   level;
+    public Position         exitPos;
+    public ArrayList<Tile>  portals;
+    
     public Player           player = new Player();
     public Dragon           dragon;
     public Bullet           bullet; //TODO: should be a list for multiple possible bullets
-    public Position         exitPos;
     
     private final Game      game;
     public final PathFindingGraph graph;      
@@ -48,6 +50,9 @@ public class GameLevel {
                               level[i][j] = new Tile(TileType.EMPTY, i, j); break;
                     
                     case 'G': level[i][j] = new Tile(TileType.GUN, i, j); break;
+                    
+                    case 'O': level[i][j] = new Tile(TileType.PORTAL, i, j); 
+                                            portals.add(level[i][j]); break;
                               
                     default:  level[i][j] = new Tile(TileType.EMPTY, i, j); break;
                 }
@@ -81,6 +86,9 @@ public class GameLevel {
         exitPos = new Position(gl.exitPos.x, gl.exitPos.y);
         for (int i = 0; i < rows; i++){
             System.arraycopy(gl.level[i], 0, level[i], 0, cols);
+            for(int j = 0; j < cols; j++){
+                level[i][j].resetToOriginalTile();
+            }
         }
         graph = new PathFindingGraph(this);
     }
@@ -143,7 +151,10 @@ public class GameLevel {
             Tile tile = level[nextPos.y][nextPos.x];
             if(tile.type == TileType.GUN){
                 player.bulletsLeft++; //TODO: should be a method
-                level[nextPos.y][nextPos.x] = new Tile(TileType.EMPTY, nextPos.x, nextPos.y);
+                tile.changeToEmptyTile();
+                //level[nextPos.y][nextPos.x] = new Tile(TileType.EMPTY, nextPos.x, nextPos.y);
+            } else if(tile.type == TileType.PORTAL){
+                int destPortal = Random.
             }
             return true;
         } 

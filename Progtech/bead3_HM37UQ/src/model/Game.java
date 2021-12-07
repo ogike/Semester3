@@ -77,6 +77,7 @@ public class Game {
     public int getLevelCols(){ return gameLevel.cols; }
     public Tile getTile(int row, int col){ return gameLevel.level[row][col]; }
     public boolean isTileFree(Position pos) { return gameLevel.isFree(pos); }
+    public int getPlayerBulletCount() { return gameLevel.player.bulletsLeft; }
 
     public Position getPlayerPos(){ //MAKE IT ~IMMUTABLE
         return gameLevel.player.getPos(); 
@@ -90,7 +91,6 @@ public class Game {
     
     public Position getBulletPos(){
         if(gameLevel.bullet != null){
-            System.out.println("drawing bullet");
             return gameLevel.bullet.getPos();
         }
         return null;

@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
+import static javax.management.timer.Timer.ONE_SECOND;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -22,20 +23,27 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import model.Direction;
 import model.Game;
 import model.GameID;
+import model.GameLevel;
 
 public class MainWindow extends JFrame{
     private final Game game;
     private Board board;
-    private final JLabel gameStatLabel;    
+    
+    private final JLabel timeLabel;    
+    private int elapsedTime;
+    private Timer timer;
     
     private final JLabel shootUpBtn;
     private final JLabel shootDownBtn;
     private final JLabel shootLeftBtn;
     private final JLabel shootRightBtn;
+    
+    private final JLabel bulletCountLabel;
     
     private boolean isStepping = false;
     
@@ -77,16 +85,18 @@ public class MainWindow extends JFrame{
         menuBar.add(menuGame);
         setJMenuBar(menuBar);
 
-        //top panel(timer and shoot btns inside)
+        //top panel(timer, bulletCount and shoot btns inside)
+        setLayout(new BorderLayout());
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         
-        //adding the time label
-        //TODO: whats going on with the numbers
-        setLayout(new BorderLayout());
-        gameStatLabel = new JLabel("Timer goes here");
-        topPanel.add(gameStatLabel, BorderLayout.WEST);
-//        add(gameStatLabel, BorderLayout.NORTH);
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new BorderLayout());
+        timeLabel = new JLabel("Elapsed time: 0");
+        labelPanel.add(timeLabel, BorderLayout.NORTH);
+        bulletCountLabel = new JLabel("Number of bullets: 0");
+        labelPanel.add(bulletCountLabel, BorderLayout.SOUTH);
+        topPanel.add(labelPanel, BorderLayout.WEST);
         
         //adding the shoot button
         JPanel shootPanel = new JPanel();
@@ -96,8 +106,8 @@ public class MainWindow extends JFrame{
         shootDownBtn = addShootBtn(Direction.DOWN, shootPanel);
         shootRightBtn = addShootBtn(Direction.RIGHT, shootPanel);
         topPanel.add(shootPanel, BorderLayout.EAST);    
+        
         add(topPanel, BorderLayout.NORTH);
-        //add(gameStatLabel, BorderLayout.NORTH);
         
         //adding the gameboard
         try { 
@@ -123,9 +133,22 @@ public class MainWindow extends JFrame{
         game.loadGame(new GameID("EASY", 1));
         board.refresh();
         
-        pack();
         //TODO: need to put proper timer here later
-        //refreshGameStatLabel();
+        elapsedTime = 0;
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                elapsedTime++;
+                refreshTimerLabel();
+            }
+            
+        });
+        timer.start();
+        refreshTimerLabel();
+        
+        refreshBulletLabel();
+        
+        pack();
         setVisible(true);
         
         //TODO: this fucks up a lot of stuff
@@ -134,6 +157,34 @@ public class MainWindow extends JFrame{
         isStepping = false;
     }
     
+    //LABEL UPDATE METHODS #####################################################
+    private void refreshTimerLabel(){
+        timeLabel.setText("Elapsed time: " + elapsedTime);
+    }
+    
+    private void restartTimer(){
+        timer.restart();
+        elapsedTime = 0;
+        refreshTimerLabel();
+    }
+    
+    private void refreshBulletLabel(){
+        bulletCountLabel.setText("Number of bullets: " + game.getPlayerBulletCount());
+        if(game.getPlayerBulletCount() < 1){
+            setShootBtnColor(Color.lightGray);
+        } else{
+            setShootBtnColor(Color.black);
+        }
+    }
+    
+    private void setShootBtnColor(Color col){
+        shootLeftBtn.setForeground(col);
+        shootRightBtn.setForeground(col);
+        shootUpBtn.setForeground(col);
+        shootDownBtn.setForeground(col);
+    }
+    
+    //EVENT HANDLING METHODS ###################################################
     private void handleKeyPressed(KeyEvent ke){
         if (!game.isLevelLoaded()) {
             System.out.println("redraw while not loaded");
@@ -149,18 +200,30 @@ public class MainWindow extends JFrame{
             case KeyEvent.VK_RIGHT: d = Direction.RIGHT; break;
             case KeyEvent.VK_UP:    d = Direction.UP; break;
             case KeyEvent.VK_DOWN:  d = Direction.DOWN; break;
+            
+            case KeyEvent.VK_A: handleShootBtnPressed(Direction.LEFT); break;
+            case KeyEvent.VK_W: handleShootBtnPressed(Direction.UP); break;
+            case KeyEvent.VK_D: handleShootBtnPressed(Direction.RIGHT); break;
+            case KeyEvent.VK_S: handleShootBtnPressed(Direction.DOWN); break;
+                    
             case KeyEvent.VK_ESCAPE: game.loadGame(game.getGameID());
+                                     restartTimer();
+                                     refreshBulletLabel();
+                                     break; //TODO: refactor game restarts
         }
         //refreshGameStatLabel();
         board.repaint();
         
         if(d != null && !game.checkWin() && !game.checkLoose()){
             game.step(d);
+            refreshBulletLabel();
             //board.repaint();
             
             if(game.checkWin()){
+                timer.stop();
                 showGameWonDialog();
             } else if (game.checkLoose()){
+                timer.stop();
                 showGameOverDialog();
             }
         }
@@ -171,6 +234,7 @@ public class MainWindow extends JFrame{
     private void handleShootBtnPressed(Direction dir){
         if(!game.checkWin() && !game.checkLoose()){
             game.shootBullet(dir);
+            refreshBulletLabel();
             board.repaint();
             
             //TODO: shouldnt be possible
@@ -180,6 +244,7 @@ public class MainWindow extends JFrame{
         }
     }
     
+    //DIALOG METHODS ###########################################################
     public void showGameWonDialog(){
         JOptionPane.showMessageDialog(MainWindow.this, 
                         "Gratulálok! Nyertél!", 
@@ -200,6 +265,8 @@ public class MainWindow extends JFrame{
         //repaint();
     }
     
+    //FACTORY METHODS##########################################################
+    
     private void createGameLevelMenuItems(JMenu menu){
         for (String s : game.getDifficulties()){
             JMenu difficultyMenu = new JMenu(s); //create new menu for difficulty
@@ -210,6 +277,8 @@ public class MainWindow extends JFrame{
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         game.loadGame(new GameID(s, i));
+                        restartTimer();
+                        refreshBulletLabel();
                         board.refresh();
                         pack();
                     }
