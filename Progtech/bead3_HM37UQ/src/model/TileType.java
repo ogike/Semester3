@@ -1,7 +1,7 @@
 package model;
 
 public enum TileType {
-    EXIT('E'), WALL('#'), EMPTY(' ');
+    EXIT('E'), WALL('#'), EMPTY(' '), GUN('G');
     TileType(char rep){ representation = rep; }
     public final char representation;
 }

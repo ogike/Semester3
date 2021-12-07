@@ -26,4 +26,9 @@ public class Tile {
     public Position getPos(){
         return new Position(col, row);
     }
+    
+    public boolean isFreeForPlayer(){
+        return type == TileType.EMPTY || type == TileType.EXIT
+                || type == TileType.GUN;
+    }
 }

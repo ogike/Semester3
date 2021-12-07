@@ -17,12 +17,12 @@ public class Player {
     
     public Player(Position pos) {
         this.pos = pos;
-        bulletsLeft = 10;
+        bulletsLeft = 0;
     }
     
     public Player(Player pl){
         this.pos = new Position(pl.pos.x, pl.pos.y);
-        bulletsLeft = 10;
+        bulletsLeft = 0;
     }
 
     public Position getPos() {

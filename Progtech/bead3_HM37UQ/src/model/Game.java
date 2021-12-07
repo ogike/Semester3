@@ -54,6 +54,7 @@ public class Game {
         boolean succesful = gameLevel.shootBullet(d);
         if(succesful){
             gameLevel.dragon.step();
+            gameLevel.checkBullet(); //check if the dragon walked into the bullet
         }
     }
     
@@ -68,7 +69,7 @@ public class Game {
     }
     
     public boolean isLevelLoaded(){ 
-        return gameLevel != null && !checkWin() && !checkLoose(); 
+        return gameLevel != null; //&& !checkWin() && !checkLoose(); 
     }
     public GameID getGameID(){ return (gameLevel != null) ? gameLevel.gameID : null; }
     
@@ -104,7 +105,7 @@ public class Game {
     }
     
     public boolean checkLoose(){
-        return gameLevel.dragon.isAlive && gameLevel.dragon.isPlayerNeighbour();
+        return gameLevel.dragon != null && gameLevel.dragon.isAlive && gameLevel.dragon.isPlayerNeighbour();
     }
     
     // ------------------------------------------------------------------------

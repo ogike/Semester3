@@ -95,13 +95,13 @@ public class MainWindow extends JFrame{
         shootUpBtn = addShootBtn(Direction.UP, shootPanel);
         shootDownBtn = addShootBtn(Direction.DOWN, shootPanel);
         shootRightBtn = addShootBtn(Direction.RIGHT, shootPanel);
-        //topPanel.add(shootPanel, BorderLayout.EAST);    
-        //add(topPanel, BorderLayout.NORTH);
-        add(gameStatLabel, BorderLayout.NORTH);
+        topPanel.add(shootPanel, BorderLayout.EAST);    
+        add(topPanel, BorderLayout.NORTH);
+        //add(gameStatLabel, BorderLayout.NORTH);
         
         //adding the gameboard
         try { 
-            add(board = new Board(game), BorderLayout.CENTER); 
+            add(board = new Board(game), BorderLayout.SOUTH); 
         } catch (IOException ex) {
             System.out.println("ajajj");
         }
@@ -135,7 +135,10 @@ public class MainWindow extends JFrame{
     }
     
     private void handleKeyPressed(KeyEvent ke){
-        if (!game.isLevelLoaded()) return;
+        if (!game.isLevelLoaded()) {
+            System.out.println("redraw while not loaded");
+            return;
+        }
         if (isStepping){ System.out.println("Double stepping!"); return;}
         isStepping = true;
         
@@ -169,6 +172,11 @@ public class MainWindow extends JFrame{
         if(!game.checkWin() && !game.checkLoose()){
             game.shootBullet(dir);
             board.repaint();
+            
+            //TODO: shouldnt be possible
+            if(game.checkLoose()){
+                showGameWonDialog();
+            }
         }
     }
     
@@ -184,12 +192,12 @@ public class MainWindow extends JFrame{
     }
     
     public void showGameOverDialog(){
-        JOptionPane.showMessageDialog(MainWindow.this, 
+        JOptionPane.showMessageDialog(this, 
                         "Game over! Kezdj egy új játékot!", 
                         "Game ovee!", 
                         JOptionPane.INFORMATION_MESSAGE);
         //TODO: actual game over
-        //board.repaint();
+        //repaint();
     }
     
     private void createGameLevelMenuItems(JMenu menu){

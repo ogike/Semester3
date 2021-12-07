@@ -16,9 +16,11 @@ public class Bullet {
         this.pos = pos;
         this.dir = dir;
         this.gl = gl;
-        if(pos.equals( gl.dragon.getPos() )){
+        
+        //shouldnt be possible since we spawn the bullet on the player
+        /*if(pos.equals( gl.dragon.getPos() )){
             gl.dragon.die();
-        }
+        }*/
     }
     
     /**
@@ -32,14 +34,10 @@ public class Bullet {
     }
     
     public boolean checkCollision(){
-        System.out.println("bullet: " + pos);
-        System.out.println("dragon: " + gl.dragon.getPos());
         if(gl.dragon.isAlive() && pos.equals( gl.dragon.getPos() )){
             gl.dragon.die();
-            System.out.println("   HIT   ");
             return true;
         }
-        System.out.println("   MISS   ");
         if (gl.isFree(pos)) {
             return false;
         } 

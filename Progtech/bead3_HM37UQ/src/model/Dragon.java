@@ -9,7 +9,7 @@ package model;
  */
 public abstract class Dragon {
     public Player target;
-    public Position pos;
+    protected Position pos;
     public boolean isAlive;
     protected Game game;
 
@@ -27,7 +27,12 @@ public abstract class Dragon {
     
     public void step(){
         //we trust that calcNextDir gives us a valid, free position
-        if(isAlive) pos = calcNextPos();
+        if(isAlive){
+            Position nextPos = calcNextPos();
+            if(nextPos != null){ //if we have a valid path
+                pos = nextPos;
+            }
+        }
     }
     
     public boolean isPlayerNeighbour(){
@@ -37,6 +42,9 @@ public abstract class Dragon {
     }
     
     public Position getPos() {
+        if(this.pos == null){
+            System.out.println("what");
+        }
         return new Position(pos.x, pos.y);
     }
 

@@ -25,7 +25,7 @@ public class PathFindingGraph {
         nodes = new ArrayList<>();
         for (int row = 0; row < gl.rows; row++) {
             for(int col = 0; col < gl.cols; col++)
-                if(gl.level[row][col].type == TileType.EMPTY){
+                if(gl.level[row][col].isFreeForPlayer()){
                     nodes.add(gl.level[row][col]);
                 }
         }
@@ -112,7 +112,7 @@ public class PathFindingGraph {
     }
     
     private boolean isEmpty (int x, int y){
-        return isValidPos(x, y) && gl.level[y][x].type == TileType.EMPTY;
+        return isValidPos(x, y) && gl.level[y][x].isFreeForPlayer();
     }
     
 //    private boolean isOpen (int x1, int y1, int x2, int y2){

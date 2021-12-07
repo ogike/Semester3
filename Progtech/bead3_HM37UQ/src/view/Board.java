@@ -16,7 +16,7 @@ public class Board extends JPanel {
     
     private Game game;
         //EXIT('E'), WALL('#'), EMPTY(' ');
-    private final Image exit, player, wall, empty, dragon, darkness, bullet;
+    private final Image exit, player, wall, empty, dragon, darkness, bullet, gun;
     private double scale;
     private int scaled_size;
     private final int tile_size = 32;
@@ -32,6 +32,7 @@ public class Board extends JPanel {
         dragon = ResourceLoader.loadImage("res/dragon.png");
         darkness = ResourceLoader.loadImage("res/darkness.png");
         bullet = ResourceLoader.loadImage("res/bullet.png");
+        gun = ResourceLoader.loadImage("res/gun.png");
     }
     
     public boolean setScale(double scale){
@@ -71,6 +72,7 @@ public class Board extends JPanel {
                     case EXIT: img = exit; break;
                     case WALL: img = wall; break;
                     case EMPTY: img = empty; break;
+                    case GUN: img = gun; break;
                 }
                 if (p.x == x && p.y == y) img = player;
                 if (d != null && d.x == x && d.y == y) img = dragon;
@@ -81,8 +83,8 @@ public class Board extends JPanel {
                 if (img == null) continue;
                 
                 gr.drawImage(img, 
-                        x * scaled_size, //x koord helye
-                        y * scaled_size, //y koord helye
+                        x * scaled_size, //x kezdő koord helye
+                        y * scaled_size, //y kezdő koord helye
                         scaled_size, 
                         scaled_size, null);
             }

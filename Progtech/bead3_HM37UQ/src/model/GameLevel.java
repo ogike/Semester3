@@ -46,6 +46,8 @@ public class GameLevel {
                               
                     case 'D': dragon = new DragonSmart( new Position(j, i), game );
                               level[i][j] = new Tile(TileType.EMPTY, i, j); break;
+                    
+                    case 'G': level[i][j] = new Tile(TileType.GUN, i, j); break;
                               
                     default:  level[i][j] = new Tile(TileType.EMPTY, i, j); break;
                 }
@@ -130,8 +132,7 @@ public class GameLevel {
      */
     public boolean isFree(Position p){
         if (!isValidPosition(p)) return false;
-        TileType li = level[p.y][p.x].type;
-        return (li == TileType.EMPTY || li == TileType.EXIT);
+        return level[p.y][p.x].isFreeForPlayer();
     }
     
     public boolean movePlayer(Direction d){
@@ -139,6 +140,11 @@ public class GameLevel {
         Position nextPos = currPos.translate(d);
         if (isFree(nextPos)) {
             player.setPos(nextPos);
+            Tile tile = level[nextPos.y][nextPos.x];
+            if(tile.type == TileType.GUN){
+                player.bulletsLeft++; //TODO: should be a method
+                level[nextPos.y][nextPos.x] = new Tile(TileType.EMPTY, nextPos.x, nextPos.y);
+            }
             return true;
         } 
         return false;
