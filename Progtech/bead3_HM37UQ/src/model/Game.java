@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Scanner;
 import res.ResourceLoader;
 
@@ -16,9 +17,12 @@ public class Game {
     private final HashMap<String, HashMap<Integer, GameLevel>> gameLevels;
     private GameLevel gameLevel = null; //current game level
     
+    private Random rand;
+    
     public Game() {
         gameLevels = new HashMap<>();
         readLevels();
+        rand = new Random();
     }
 
     // ------------------------------------------------------------------------
@@ -79,11 +83,14 @@ public class Game {
     public boolean isTileFree(Position pos) { return gameLevel.isFree(pos); }
     public int getPlayerBulletCount() { return gameLevel.player.bulletsLeft; }
 
-    public Position getPlayerPos(){ //MAKE IT ~IMMUTABLE
-        return gameLevel.player.getPos(); 
+    public Position getPlayerPos(){ return gameLevel.player.getPos(); }
+    
+    public Tile getPlayerTile(){ 
+        Position plPos = getPlayerPos();
+        return gameLevel.level[plPos.y][plPos.x];
     }
     
-    public Position getDragonPos(){ //MAKE IT ~IMMUTABLE
+    public Position getDragonPos(){
         if(gameLevel.dragon != null && gameLevel.dragon.isAlive())
             return gameLevel.dragon.getPos();
         return null;
@@ -127,6 +134,7 @@ public class Game {
                 //reads out the gameId
                 GameID id = readGameID(line);
                 if (id == null) return;
+                String dragonType = readNextLine(sc);
 
                 //goes thru one whole level
                 gameLevelRows.clear();
@@ -135,7 +143,7 @@ public class Game {
                     gameLevelRows.add(line);                    
                     line = readNextLine(sc);
                 }
-                addNewGameLevel(new GameLevel(gameLevelRows, id, this));
+                addNewGameLevel(new GameLevel(gameLevelRows, id, dragonType, this));
             }
             //if (is != null) is.close();
         } catch (Exception e){
@@ -182,4 +190,15 @@ public class Game {
         
         return new GameID(difficulty, id);
     }    
+    
+    // UTIL METHODS ############################################################
+    /**
+     * Gets a new random number
+     * @param min
+     * @param max
+     * @return a random number between min (inclusive) and max (exclusive)
+     */
+    public int getRandom(int min, int max){
+        return min + rand.nextInt(max);
+    }
 }

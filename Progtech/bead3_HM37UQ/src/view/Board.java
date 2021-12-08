@@ -12,11 +12,12 @@ import model.Position;
 import res.ResourceLoader;
 
 public class Board extends JPanel {
-    private int fogOfWarDist = 3;
+    private final int fogOfWarDist = 3;
     
     private Game game;
         //EXIT('E'), WALL('#'), EMPTY(' ');
-    private final Image exit, player, wall, empty, dragon, darkness, bullet, gun;
+    private final Image exit, player, player_hidden, wall, empty, dragon,
+            darkness, bullet, gun, portal, bush;
     private double scale;
     private int scaled_size;
     private final int tile_size = 32;
@@ -27,12 +28,15 @@ public class Board extends JPanel {
         scaled_size = (int)(scale * tile_size);
         exit = ResourceLoader.loadImage("res/destination.png");
         player = ResourceLoader.loadImage("res/player.png");
+        player_hidden = ResourceLoader.loadImage("res/player_hidden.png");
         wall = ResourceLoader.loadImage("res/wall.png");
         empty = ResourceLoader.loadImage("res/empty.png");
         dragon = ResourceLoader.loadImage("res/dragon.png");
         darkness = ResourceLoader.loadImage("res/darkness.png");
         bullet = ResourceLoader.loadImage("res/bullet.png");
         gun = ResourceLoader.loadImage("res/gun.png");
+        portal = ResourceLoader.loadImage("res/portal.png");
+        bush = ResourceLoader.loadImage("res/bush.png");
     }
     
     public boolean setScale(double scale){
@@ -73,8 +77,12 @@ public class Board extends JPanel {
                     case WALL: img = wall; break;
                     case EMPTY: img = empty; break;
                     case GUN: img = gun; break;
+                    case PORTAL: img = portal; break;
+                    case BUSH: img = bush; break;
                 }
-                if (p.x == x && p.y == y) img = player;
+                if (p.x == x && p.y == y){
+                    img = (li != TileType.BUSH)? player : player_hidden;
+                }
                 if (d != null && d.x == x && d.y == y) img = dragon;
                 if (b != null && b.x == x && b.y == y) img = bullet;
                 

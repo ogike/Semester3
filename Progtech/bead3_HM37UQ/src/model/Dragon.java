@@ -36,6 +36,8 @@ public abstract class Dragon {
     }
     
     public boolean isPlayerNeighbour(){
+        if(game.getPlayerTile().type == TileType.BUSH) return false;
+        
         Position plPos = target.getPos();   
         if(pos.manhattanDistance(plPos) <= 1) return true;
         return false;
@@ -59,9 +61,5 @@ public abstract class Dragon {
     
     protected abstract Position calcNextPos();
     
-    /**
-     * TODO
-     * @return 
-     */
     public abstract Dragon getDeepCopy();
 }

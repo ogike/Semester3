@@ -39,6 +39,11 @@ public class Tile {
     
     public boolean isFreeForPlayer(){
         return type == TileType.EMPTY || type == TileType.EXIT
-                || type == TileType.GUN || type == TileType.PORTAL;
+                || type == TileType.GUN || type == TileType.PORTAL
+                || type == TileType.BUSH;
+    }
+    
+    public boolean isFreeForDragon(){
+        return isFreeForPlayer() && type != TileType.BUSH;
     }
 }

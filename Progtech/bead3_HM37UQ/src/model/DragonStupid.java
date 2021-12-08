@@ -50,7 +50,6 @@ public class DragonStupid extends Dragon {
         }
         
         if(!goodDir){
-            //TODO: handle dragon not being able to move
             System.out.println("Error, dragon cant move.");
             nextPos = pos;
         }

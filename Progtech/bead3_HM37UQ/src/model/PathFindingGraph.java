@@ -98,7 +98,6 @@ public class PathFindingGraph {
             nextParent = p[fromIndex][nextParent];
             safetyCounter++;
             if(safetyCounter > numOfNodes){
-                //TODO: exception
                 System.out.println("Entered infinite loop!");
                 return null;
             }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class GameLevel {
     public final GameID     gameID;
+    public final String     dragonType;
+    
     public final int        rows, cols;
     public final Tile[][]   level;
     public Position         exitPos;
@@ -22,8 +24,9 @@ public class GameLevel {
      * @param gameLevelRows The string representation of the level, line by line
      * @param gameID The difficulty - gameNumber pair
      */
-    public GameLevel(ArrayList<String> gameLevelRows, GameID gameID, Game game){
+    public GameLevel(ArrayList<String> gameLevelRows, GameID gameID, String dragonType, Game game){
         this.gameID = gameID;
+        this.dragonType = dragonType;
         this.game = game;
         
         //getting the col of the widest line
@@ -33,6 +36,7 @@ public class GameLevel {
         rows = gameLevelRows.size();
         cols = c;
         level = new Tile[rows][cols];
+        portals = new ArrayList<>();
         
         for (int i = 0; i < rows; i++){
             String s = gameLevelRows.get(i);
@@ -46,10 +50,15 @@ public class GameLevel {
                     case 'E': exitPos = new Position(j, i);
                               level[i][j] = new Tile(TileType.EXIT, i, j); break;
                               
-                    case 'D': dragon = new DragonSmart( new Position(j, i), game );
+                    case 'D': if(dragonType.equals("DRAGON2"))
+                                dragon = new DragonSmart( new Position(j, i), game );
+                              else //DRAGON1
+                                dragon = new DragonStupid( new Position(j, i), game );
                               level[i][j] = new Tile(TileType.EMPTY, i, j); break;
                     
                     case 'G': level[i][j] = new Tile(TileType.GUN, i, j); break;
+                    
+                    case 'B': level[i][j] = new Tile(TileType.BUSH, i, j); break;
                     
                     case 'O': level[i][j] = new Tile(TileType.PORTAL, i, j); 
                                             portals.add(level[i][j]); break;
@@ -68,6 +77,10 @@ public class GameLevel {
             dragon.setTarget(player);
         }
         graph = null; //we only set it once we actually start the map
+        if(portals.size() == 1){
+            portals.get(0).changeToEmptyTile();
+            System.out.println("Lonely, unusable portal on map!");
+        }
     }
 
     /**
@@ -76,6 +89,7 @@ public class GameLevel {
      */
     public GameLevel(GameLevel gl) {
         gameID = gl.gameID;
+        dragonType = gl.dragonType;
         game = gl.game;
         rows = gl.rows;
         cols = gl.cols;
@@ -90,6 +104,7 @@ public class GameLevel {
                 level[i][j].resetToOriginalTile();
             }
         }
+        portals = gl.portals;
         graph = new PathFindingGraph(this);
     }
     
@@ -150,11 +165,12 @@ public class GameLevel {
             player.setPos(nextPos);
             Tile tile = level[nextPos.y][nextPos.x];
             if(tile.type == TileType.GUN){
-                player.bulletsLeft++; //TODO: should be a method
+                player.bulletsLeft++;
                 tile.changeToEmptyTile();
-                //level[nextPos.y][nextPos.x] = new Tile(TileType.EMPTY, nextPos.x, nextPos.y);
             } else if(tile.type == TileType.PORTAL){
-                int destPortal = Random.
+                int destPortal = game.getRandom(0, portals.size()-1);
+                if(tile == portals.get(destPortal)) destPortal++;
+                player.setPos( portals.get(destPortal).getPos() );
             }
             return true;
         } 

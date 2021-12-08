@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import static javax.management.timer.Timer.ONE_SECOND;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -29,9 +30,12 @@ import model.Direction;
 import model.Game;
 import model.GameID;
 import model.GameLevel;
+import persistence.HighScore;
+import persistence.HighScoresManager;
 
 public class MainWindow extends JFrame{
     private final Game game;
+    private final HighScoresManager highScoresManager;
     private Board board;
     
     private final JLabel timeLabel;    
@@ -56,13 +60,14 @@ public class MainWindow extends JFrame{
     public MainWindow() /*throws IOException */{
         //creating the model
         game = new Game();
+        highScoresManager = new HighScoresManager();
         isStepping = true;
         
         //setting the windows itself ####
         setTitle("Labirintus ");
         setSize(600, 600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        URL url = MainWindow.class.getClassLoader().getResource("res/tmp_icon.jpg");
+        URL url = MainWindow.class.getClassLoader().getResource("res/dragon.png");
         setIconImage(Toolkit.getDefaultToolkit().getImage(url));
         
         //creating menubar #######################
@@ -79,8 +84,17 @@ public class MainWindow extends JFrame{
             }
         });
         
+        //display highscores action ####################
+        JMenuItem menuHighScores = new JMenuItem(new AbstractAction("Eredmények") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showHighScores();
+            }
+        });
+        
         //adding menubar to window
         menuGame.add(menuGameLevel);
+        menuGame.add(menuHighScores);
         menuGame.add(menuGameExit);
         menuBar.add(menuGame);
         setJMenuBar(menuBar);
@@ -130,10 +144,9 @@ public class MainWindow extends JFrame{
         setLocationRelativeTo(null);
         
         //starting EASY 1
-        game.loadGame(new GameID("EASY", 1));
+        game.loadGame(new GameID("EASY", 1/*, "DRAGON2"*/));
         board.refresh();
         
-        //TODO: need to put proper timer here later
         elapsedTime = 0;
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -151,7 +164,6 @@ public class MainWindow extends JFrame{
         pack();
         setVisible(true);
         
-        //TODO: this fucks up a lot of stuff
         setFocusable(true);
         setLocationRelativeTo(null);
         isStepping = false;
@@ -237,7 +249,6 @@ public class MainWindow extends JFrame{
             refreshBulletLabel();
             board.repaint();
             
-            //TODO: shouldnt be possible
             if(game.checkLoose()){
                 showGameWonDialog();
             }
@@ -250,20 +261,23 @@ public class MainWindow extends JFrame{
                         "Gratulálok! Nyertél!", 
                         "Gratulálok!", 
                         JOptionPane.INFORMATION_MESSAGE);
-                //execution only returns to here when the dialog btn is clicked
-                //TODO: should be next level, or check if game completed
-                    //(currently only freezes movement)
-        //board.repaint();
+        highScoresManager.levelWon(game.getGameID());
     }
     
     public void showGameOverDialog(){
-        JOptionPane.showMessageDialog(this, 
+        String name = JOptionPane.showInputDialog(this, 
                         "Game over! Kezdj egy új játékot!", 
-                        "Game ovee!", 
+                        "Game over!", 
                         JOptionPane.INFORMATION_MESSAGE);
-        //TODO: actual game over
-        //repaint();
+        if(!name.isEmpty())
+            highScoresManager.uploadHighScore(name);
     }
+    
+    public void showHighScores(){
+        ArrayList<HighScore> scores = highScoresManager.getHighScores();
+        HighScoresWindow window = new HighScoresWindow(scores);
+    }
+    
     
     //FACTORY METHODS##########################################################
     

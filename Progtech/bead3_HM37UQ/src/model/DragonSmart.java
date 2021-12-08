@@ -15,7 +15,12 @@ public class DragonSmart extends Dragon {
     
     @Override
     protected Position calcNextPos() {
-       return game.getNextStepFromPath(pos, target.getPos());
+        if(game.getPlayerTile().isFreeForDragon()){
+            return game.getNextStepFromPath(pos, target.getPos());
+        } else{
+            //TODO: random dir?
+            return pos;
+        }
     }
 
     @Override

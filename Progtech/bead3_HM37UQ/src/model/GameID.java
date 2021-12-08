@@ -9,17 +9,20 @@ import java.util.Objects;
 public class GameID {
     public final String difficulty;
     public final int    level;
+    //public final String dragonType;
 
-    public GameID(String difficulty, int level) {
+    public GameID(String difficulty, int level/*, String dragonType*/) {
         this.difficulty = difficulty;
         this.level = level;
+        //this.dragonType = dragonType;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.difficulty);
-        hash = 29 * hash + this.level;
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.difficulty);
+        hash = 37 * hash + this.level;
+        //hash = 37 * hash + Objects.hashCode(this.dragonType);
         return hash;
     }
 
@@ -41,8 +44,13 @@ public class GameID {
         if (!Objects.equals(this.difficulty, other.difficulty)) {
             return false;
         }
+        //if (!Objects.equals(this.dragonType, other.dragonType)) {
+        //    return false;
+        //}
         return true;
     }
+
+    
     
     
 }
