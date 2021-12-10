@@ -52,9 +52,7 @@ public class MainWindow extends JFrame{
     private boolean isStepping = false;
     
     public static void main(String[] args) {
-        //try {
             new MainWindow();
-        //} catch (IOException ex) {}
     }
     
     public MainWindow() /*throws IOException */{
@@ -269,7 +267,7 @@ public class MainWindow extends JFrame{
                         "Game over! Kezdj egy új játékot!", 
                         "Game over!", 
                         JOptionPane.INFORMATION_MESSAGE);
-        if(!name.isEmpty())
+        if(name != null && !name.isEmpty())
             highScoresManager.uploadHighScore(name);
     }
     

@@ -12,7 +12,7 @@ import model.Position;
 import res.ResourceLoader;
 
 public class Board extends JPanel {
-    private final int fogOfWarDist = 3;
+    private final int fogOfWarDist = 10;
     
     private Game game;
         //EXIT('E'), WALL('#'), EMPTY(' ');
