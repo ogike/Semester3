@@ -1,26 +1,5 @@
 <?php 
-//ELSŐ#########################################
-// echo file_get_contents('test.txt');
 
-// file_put_contents('test.txt', 'Szöveg');
-
-// echo file_get_contents('test.txt');
-//fentiek nincs tesztelve
-
-//MÁSODIK#############################################################
-// $data = json_decode(file_get_contents('data.json'));
-
-// $data[] = [
-//     'nev'=> 'Zoli',
-//     'targykod' => 'fasz'
-// ];
-
-// var_dump($data);
-
-// file_put_contents('data.json', json_encode($data, JSON_PRETTY_PRINT));
-
-
-//HARMADIK##########################################
 $data = json_decode(file_get_contents('data.json'));
 
 ?>
@@ -59,4 +38,5 @@ $data = json_decode(file_get_contents('data.json'));
     <button onclick="window.location.href='addmusic.php'">Add a song!</button>
     <button id="re">Frissít</button>
 </body>
+<script src="fetch.js"></script>
 </html>

@@ -4,8 +4,8 @@
 /**
  * 
  * @param {*} celnev Milyen adatot fetcheljünk
- * @param {*} fuggveny 
- * @param {*} json 
+ * @param {*} fuggveny milyen függvényt hívjunk meg (paraméterben a fetchelt adattal) (feldolgozó fgv)
+ * @param {*} json  json-ná, vagy plaintext-ként adjuk át függvénynek az adatot?
  */
 function fetchke(celnev, fuggveny, json = true){
     //       lekérjük az adatot
@@ -27,14 +27,18 @@ function refresh(adat){
     
     adat.forEach(element => {
         let row = document.createElement('tr')
-        row.innerHTML = `<td>${element.cim}</td>
+        row.innerHTML = `<td>${element.title}</td>
         <td>${element.artist}</td>
         <td>${element.year}</td>
         <td><a href="${element.link}">▶</a></td>
         <td>
             <a href="deletemusic.php?toDelete=<?=$song->title?>">X</a>
         </td>`
+        table.appendChild(row)
     });
 }
 
-document.querySelector('#re').addEventListener('click', refresh) //TODO: bef
+document.querySelector('#re').addEventListener('click', ()=> fetchke('fetch.php', refresh))
+
+//load the refresh on page reload
+document.addEventListener('load', ()=> fetchke('fetch.php', refresh))
