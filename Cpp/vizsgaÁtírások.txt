@@ -1,0 +1,4 @@
+pragma once
+kontruktor = default, = 0, {}
+casting?
+size_t vagy unsigned int
