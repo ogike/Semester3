@@ -1,0 +1,27 @@
+{
+    "teamid1" : {
+        "id" : "teamid1",
+        "name" : "Team #1",
+        "city" : "City #1", 
+        "comments" : {
+            "commentid1" : {
+                "author" : "userid1",
+                "text" : "Hajrá fiúk!",
+                "time" : "2021-11-16 17:48",
+                "teamid" : "teamid1"
+            },
+            "commentid2" : {
+                "author" : "userid2",
+                "text" : "Jó volt a legutóbbi meccs!",
+                "time" : "2021-11-16 17:52",
+                "teamid" : "teamid1"
+            }
+        }
+    },
+    "teamid2" : {
+        "id" : "teamid2",
+        "name" : "Team #2",
+        "city" : "City #2",
+        "comments" : {}
+    }
+}

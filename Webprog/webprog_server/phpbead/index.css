@@ -1,0 +1,34 @@
+
+/* MATCH RESULTS ##################### */
+.win{
+    color: green;
+}
+.loose{
+    color: red;
+}
+.tie{
+    color: yellow;
+}
+
+/* COMMENT STYLING ##################### */
+
+.commentDiv{
+    border-style: solid;
+    padding-left:1em;
+    /* border: 1px solid black; */
+}
+
+.commentAuthor{
+    font-size: 1.3em;
+    font-style: italic;
+    font-weight: bold;
+    margin-bottom: 0em;
+}
+
+.commentTime{
+    font-style: italic;
+}
+
+.commentText{
+
+}
