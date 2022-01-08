@@ -39,8 +39,8 @@ function tartalmaz($nagyString, $eztTartalmazza){
             </tr>
             <?php foreach($data as $sor): ?>
                 <?php if(
-                    (!isset($_POST["faj"]) || trim($_POST['faj']) == '' || tartalmaz($sor->allat, $_POST["faj"])))
-                ) ?>
+                    (!isset($_POST["faj"]) || trim($_POST['faj']) == '' || tartalmaz($sor->allat, $_POST["faj"]))
+                ): ?>
                     <tr>
 
                     </tr>

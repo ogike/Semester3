@@ -8,6 +8,27 @@ $users = json_decode(file_get_contents('users.json'));
 $teamid = $_GET['teamid'];
 $team = $teams->$teamid;
 
+// COMMENT WRITING ###########################################################
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if(isset($_POST['add-comment'])){
+        //get the last comments key
+        end($teams->$teamid->comments);
+        $newId = key($teams->$teamid->comments);
+
+        $newId++;
+        $teams->$teamid->comments->$newId = (object)[
+            "author" => "userid1", //TODO: set user name
+            "text" => $_POST['comment'],
+            "time" => "2021-11-16 17:52", //TODO: get the current time
+            "teamid" => $teamid
+        ];
+        
+        file_put_contents('teams.json', json_encode($teams, JSON_PRETTY_PRINT));
+    }
+}
+
+
+// GETTERS ###################################################################
 function getTeamName($id){
     $teams = json_decode(file_get_contents('teams.json')); //really inefficient?
     return $teams->$id->name;
@@ -51,7 +72,7 @@ function getMatchResultFormat($matchId){
     <a href="index.php">Vissza a főoldalra</a>
     <h1><?=$team->name?> oldala</h1>
 
-    <div>
+    <div> <!-- Meccsek --> 
         <h2>Lejátszott meccsek</h2>
         <table>
             <tr>
@@ -83,8 +104,18 @@ function getMatchResultFormat($matchId){
         </table>
     </div>
 
-    <div>
+    <div> <!-- Hozzászólások -->
         <h2>Hozzászólások</h2>
+
+        <form action="" method="post" novalidate>
+            <fieldset>
+                <legend>Írj új hozzászólást!</legend>
+                Név: <input type="text" name="author"> <br>
+                Hozzászólás: <textarea name="comment" rows="4" cols="40"></textarea>
+                <button name="add-comment" type="submit">Küldés</button>
+            </fieldset>
+        </form>
+
         <ul>
             <?php foreach($team->comments as $commentid => $comment): ?>
                 <div class="commentDiv">

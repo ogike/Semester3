@@ -3,9 +3,13 @@
 $teams = json_decode(file_get_contents('teams.json'));
 $matches = json_decode(file_get_contents('matches.json'), true);
 
-// echo '<pre>', var_dump($matches), '</pre>';
+$logged_in = false;
 
-//echo date("jS F, Y", strtotime($matches['matchid2']['date']));
+session_start();
+if(isset($_SESSION['user'])){
+    $logged_in = true;
+}
+
 
 function matchComparator($a, $b){
     return strtotime($b["date"]) - strtotime($a["date"]);
@@ -34,7 +38,17 @@ function getTeamName($id){
 </head>
 <body>
     <h1>Eötvös Lóránd Stadion meccsei</h1>
-    <div>
+
+    <div> <!-- Login/logout --> 
+        <?php if($logged_in == false): ?>
+            <button onclick="window.location.href='login.php'">Log in</button>
+        <?php else: ?>
+            <p>Welcome, <?=$_SESSION['user']?>!</p>
+            <button onclick="window.location.href='logout.php'">Log out</button>
+        <?php endif ?>
+    </div>
+
+    <div> <!-- Csapatok táblázat --> 
         <h2>Csapatok</h2>
         <table>
             <tr>
@@ -53,7 +67,7 @@ function getTeamName($id){
         </table>
     </div>
 
-    <div>
+    <div> <!-- Utolsó meccsek --> 
         <h2>Utolsó meccsek</h2>
         <table>
             <tr>

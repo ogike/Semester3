@@ -2,6 +2,12 @@
 
 $data = json_decode(file_get_contents('data.json'));
 
+$logged_in = false;
+
+if(isset($_SESSION['user'])){
+    $logged_in = false;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,8 +41,16 @@ $data = json_decode(file_get_contents('data.json'));
             </tr>
         <?php endforeach ?>
     </table>
-    <button onclick="window.location.href='addmusic.php'">Add a song!</button>
+
+    <?php if($logged_in): ?>
+        <button onclick="window.location.href='addmusic.php'">Add a song!</button>
+    <?php endif ?>
+
     <button id="re">Frissít</button>
+    
+    <?php if($logged_in): ?>
+        <button onclick="window.location.href='login.php'">Log out</button>
+    <?php endif ?>
 </body>
 <script src="fetch.js"></script>
 </html>
