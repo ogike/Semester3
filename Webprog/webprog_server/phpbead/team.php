@@ -8,18 +8,32 @@ $users = json_decode(file_get_contents('users.json'));
 $teamid = $_GET['teamid'];
 $team = $teams->$teamid;
 
+$logged_in = false;
+
+session_start();
+if(isset($_SESSION['user'])){
+    $logged_in = true;
+}
+
 // COMMENT WRITING ###########################################################
+date_default_timezone_set('Europe/Budapest');
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    if(isset($_POST['add-comment'])){
-        //get the last comments key
-        end($teams->$teamid->comments);
-        $newId = key($teams->$teamid->comments);
+    if(isset($_POST['add-comment']) && $logged_in){ //TODO: csak bejelentkezéssel
+
+        $newId = '';
+        if(!empty($teams->$teamid->comments)){ //if there are already comments
+            //get the last comments key
+            end($teams->$teamid->comments); //DEBUG: check if newId will be correct after id9
+            $newId = key($teams->$teamid->comments);
+        } else{
+            $newId = 'commentid1';
+        }
 
         $newId++;
         $teams->$teamid->comments->$newId = (object)[
-            "author" => "userid1", //TODO: set user name
+            "author" => $_SESSION['user'],
             "text" => $_POST['comment'],
-            "time" => "2021-11-16 17:52", //TODO: get the current time
+            "time" => date("Y-m-d H:i:s", time()), //FIXME: off by half an hour?
             "teamid" => $teamid
         ];
         
@@ -110,16 +124,22 @@ function getMatchResultFormat($matchId){
         <form action="" method="post" novalidate>
             <fieldset>
                 <legend>Írj új hozzászólást!</legend>
-                Név: <input type="text" name="author"> <br>
-                Hozzászólás: <textarea name="comment" rows="4" cols="40"></textarea>
-                <button name="add-comment" type="submit">Küldés</button>
+
+                <?php if($logged_in): ?>
+                    Hozzászólás: <textarea name="comment" rows="4" cols="40"></textarea>
+                    <button name="add-comment" type="submit">Küldés</button>
+                <?php else: ?>
+                    <p>Hozzászólás írásához először be kell jelentkezni!</p>
+                    <!-- FIXME: NS_BINDING_ABORTED???? -->
+                    <button onclick="window.location.href='login.php'">Log in</button>
+                <?php endif ?>
             </fieldset>
         </form>
 
         <ul>
             <?php foreach($team->comments as $commentid => $comment): ?>
                 <div class="commentDiv">
-                    <p class="commentAuthor"><?=getUserName($users, $comment->author)?></p>
+                    <p class="commentAuthor"><?=$comment->author?></p>
                     <p class="commentTime"><?=$comment->time?></p>
                     <p class="commentText"><?=$comment->text?></p>
                 </div>

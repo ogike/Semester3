@@ -21,6 +21,12 @@
                 "text": "ajhkahkaha",
                 "time": "2021-11-16 17:52",
                 "teamid": "teamid1"
+            },
+            "commentid4": {
+                "author": "user2",
+                "text": "ez egy hozz\u00e1sz\u00f3l\u00e1s",
+                "time": "2021-11-16 17:52",
+                "teamid": "teamid1"
             }
         }
     },
@@ -28,6 +34,6 @@
         "id": "teamid2",
         "name": "Team #2",
         "city": "City #2",
-        "comments": []
+        "comments": {}
     }
 }
