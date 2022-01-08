@@ -16,28 +16,26 @@ if(isset($_SESSION['user'])){
 }
 
 // COMMENT WRITING ###########################################################
+$commentError = '';
 date_default_timezone_set('Europe/Budapest');
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    if(isset($_POST['add-comment']) && $logged_in){ //TODO: csak bejelentkezéssel
+    if(isset($_POST['add-comment']) && $logged_in){
 
-        $newId = '';
-        if(!empty($teams->$teamid->comments)){ //if there are already comments
-            //get the last comments key
-            end($teams->$teamid->comments); //DEBUG: check if newId will be correct after id9
-            $newId = key($teams->$teamid->comments);
+        if(!isset($_POST['comment']) || trim($_POST['comment']) === ''){
+            $commentError = 'Üres hozzászólást nem tudsz küldeni!';
         } else{
-            $newId = 'commentid1';
-        }
 
-        $newId++;
-        $teams->$teamid->comments->$newId = (object)[
-            "author" => $_SESSION['user'],
-            "text" => $_POST['comment'],
-            "time" => date("Y-m-d H:i:s", time()), //FIXME: off by half an hour?
-            "teamid" => $teamid
-        ];
-        
-        file_put_contents('teams.json', json_encode($teams, JSON_PRETTY_PRINT));
+            $newId = getLastCommenId($teams->$teamid);
+            $newId++; //after commentid9 it will turn into commentie0, fine for me
+            $teams->$teamid->comments->$newId = (object)[
+                "author" => $_SESSION['user'],
+                "text" => $_POST['comment'],
+                "time" => date("Y-m-d H:i:s", time()),
+                "teamid" => $teamid
+            ];
+            
+            file_put_contents('teams.json', json_encode($teams, JSON_PRETTY_PRINT));
+        }
     }
 }
 
@@ -53,7 +51,7 @@ function getUserName($users, $userId){
     return $users->$userId->username;
 }
 
-//TODO: pass the whole match?
+//REFACTOR: pass the whole match?
 function getMatchResultFormat($matchId){
     $teamid = $_GET['teamid'];
     $matches = json_decode(file_get_contents('matches.json'));
@@ -67,6 +65,16 @@ function getMatchResultFormat($matchId){
     }
     else{
         return 'loose';
+    }
+}
+
+function getLastCommenId($team){
+    if(!empty($team->comments)){ //if there are already comments
+        //get the last comments key
+        end($team->comments);
+        return key($team->comments);
+    } else{
+        return 'commentid1'; 
     }
 }
 
@@ -121,21 +129,25 @@ function getMatchResultFormat($matchId){
     <div> <!-- Hozzászólások -->
         <h2>Hozzászólások</h2>
 
-        <form action="" method="post" novalidate>
-            <fieldset>
-                <legend>Írj új hozzászólást!</legend>
+        <?php if($logged_in): ?>
+            <form action="" method="post" novalidate>
+                <fieldset>
+                    <legend>Írj új hozzászólást!</legend>
 
-                <?php if($logged_in): ?>
+                    <?php if($commentError != ''): ?>
+                        <p class="errorMsg"><?=$commentError?></p> <!-- FIXME: class doesnt get applied? -->
+                    <?php endif ?>
+
                     Hozzászólás: <textarea name="comment" rows="4" cols="40"></textarea>
                     <button name="add-comment" type="submit">Küldés</button>
-                <?php else: ?>
-                    <p>Hozzászólás írásához először be kell jelentkezni!</p>
-                    <!-- FIXME: NS_BINDING_ABORTED???? -->
-                    <button onclick="window.location.href='login.php'">Log in</button>
-                <?php endif ?>
-            </fieldset>
-        </form>
-
+                </fieldset>
+            </form>
+        <?php else: ?>
+            <p>Hozzászólás írásához először be kell jelentkezni!</p>
+            <!-- TODO: pass current page as get parameter so it redirects here after login -->
+            <button onclick="window.location.href='login.php'">Log in</button>
+        <?php endif ?>
+            
         <ul>
             <?php foreach($team->comments as $commentid => $comment): ?>
                 <div class="commentDiv">

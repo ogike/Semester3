@@ -31,11 +31,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <title>Bejelentkezés - PHP bead - HM37UQ</title>
 </head>
 <body>
-    <form method="post">
+    <form method="post" novalidate>
         <h2>Jelentkezz be!</h2>
 
         <?php if($loginerror != ''): ?>
-            <p class="loginError"><?=$loginerror?></p>
+            <p class="errorMsg"><?=$loginerror?></p>
         <?php endif ?>
         
         Felhasználónév: <input type="text" name="username"> <br>
