@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: black;
+    font-size: 1.5em;
+}
+
+button {
+    font-size: 0.8em;
+}
+
+h1 {
+    font-size: 2.7em;
+}
+h2 {
+    font-size: 2em;
+}
+
+h1, h2{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #1Db954;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#inputfields {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #92cc97; /*or maybe lightgrey*/
+    padding: 5px;
+    max-width: 50%;
+    font-size: 1.3em;
+}
+
+#formextra {
+    background-color: #b4cab6;
+    margin-left: -5px;
+    margin-right: -5px;
+    padding: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+input {
+    font-size: 1em;
+}
+
+span {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+table {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    background-color: lightgrey;
+    padding: 5px;
+}
+
+#monthStats{
+    max-width: 85%;
+}
+
+#fullStats{
+    min-width: 85%;
+    max-width: min-content;
+}
+
+th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+th {
+    background-color: #058c05;
+    color: white;
+}
+
+#monthStats td {
+    width: 7%;
+    text-align: center;
+}
+
+.short {
+    word-wrap: break-word;
+    max-width: 5em;
+
+}
+
+.limitlinks, li>a, .storylink {
+    color: yellow;
+}
+
+button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.top {
+    background-color: #51ba51;
+}
+
+p, li {
+    color: white;
+}

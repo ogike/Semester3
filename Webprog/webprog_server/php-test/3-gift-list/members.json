@@ -4,19 +4,35 @@
         "name": "My dear father",
         "ideas": [
             {
-                "name" : "idea1",
-                "status": "new"
+                "name": "idea1",
+                "status": "ok"
             },
             {
-                "name" : "idea2",
+                "name": "idea2",
                 "status": "discarded"
             },
             {
-                "name" : "idea3",
+                "name": "idea3",
+                "status": "ok"
+            },
+            {
+                "name": "idea4",
+                "status": "discarded"
+            },
+            {
+                "name": "hift",
+                "status": "ok"
+            },
+            {
+                "name": "fgdjgf",
+                "status": "discarded"
+            },
+            {
+                "name": "kjsksahsa",
                 "status": "new"
             },
             {
-                "name" : "idea4",
+                "name": "kjhkh",
                 "status": "new"
             }
         ]

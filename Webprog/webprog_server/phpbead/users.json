@@ -1,0 +1,14 @@
+{
+    "userid1" : {
+        "id" : "userid1",
+        "username" : "user1",
+        "email" : "email1",
+        "password" : "pwd"
+    },
+    "userid2" : {
+        "id" : "userid2",
+        "username" : "user2",
+        "email" : "email1",
+        "password" : "1234"
+    }
+}

@@ -1,0 +1,118 @@
+{
+    "teamid1": {
+        "id": "teamid1",
+        "name": "Team #1",
+        "city": "City #1",
+        "comments": {
+            "commentid1": {
+                "author": "userid1",
+                "text": "Hajr\u00e1 fi\u00fak!",
+                "time": "2021-11-16 17:48",
+                "teamid": "teamid1"
+            },
+            "commentid2": {
+                "author": "userid2",
+                "text": "J\u00f3 volt a legut\u00f3bbi meccs!",
+                "time": "2021-11-16 17:52",
+                "teamid": "teamid1"
+            },
+            "commentid3": {
+                "author": "userid1",
+                "text": "ajhkahkaha",
+                "time": "2021-11-16 17:52",
+                "teamid": "teamid1"
+            },
+            "commentid8": {
+                "author": "user2",
+                "text": "ez egy hozz\u00e1sz\u00f3l\u00e1s",
+                "time": "2021-11-16 17:52",
+                "teamid": "teamid1"
+            },
+            "commentid9": {
+                "author": "user1",
+                "text": "teszt",
+                "time": "2022-01-08 16:10:42",
+                "teamid": "teamid1"
+            },
+            "commentie0": {
+                "author": "user1",
+                "text": "teszt2",
+                "time": "2022-01-08 16:10:48",
+                "teamid": "teamid1"
+            },
+            "commentie1": {
+                "author": "user1",
+                "text": "teszt3",
+                "time": "2022-01-08 16:11:26",
+                "teamid": "teamid1"
+            }
+        }
+    },
+    "teamid2": {
+        "id": "teamid2",
+        "name": "Team #2",
+        "city": "City #2",
+        "comments": {
+            "1": {
+                "author": "user1",
+                "text": "first",
+                "time": "2021-11-16 17:52",
+                "teamid": "teamid2"
+            },
+            "3": {
+                "author": "user1",
+                "text": "3rd",
+                "time": "2022-01-08 15:03",
+                "teamid": "teamid2"
+            },
+            "4": {
+                "author": "user1",
+                "text": "nbnk",
+                "time": "2022-01-08 15:03",
+                "teamid": "teamid2"
+            },
+            "5": {
+                "author": "user1",
+                "text": "bfjhjh",
+                "time": "2022-01-08 15:01",
+                "teamid": "teamid2"
+            },
+            "6": {
+                "author": "user1",
+                "text": "kbaksaks",
+                "time": "2022-01-08 15:05:42",
+                "teamid": "teamid2"
+            },
+            "7": {
+                "author": "user1",
+                "text": "hjjg",
+                "time": "2022-01-08 15:06:07",
+                "teamid": "teamid2"
+            },
+            "8": {
+                "author": "user1",
+                "text": "kajgskah",
+                "time": "2022-01-08 15:07:29",
+                "teamid": "teamid2"
+            },
+            "9": {
+                "author": "user1",
+                "text": "kajgskah",
+                "time": "2022-01-08 15:08:20",
+                "teamid": "teamid2"
+            },
+            "10": {
+                "author": "user1",
+                "text": "ksajhkaskjsa",
+                "time": "2022-01-08 15:08:26",
+                "teamid": "teamid2"
+            },
+            "11": {
+                "author": "user1",
+                "text": "hello",
+                "time": "2022-01-08 15:09:14",
+                "teamid": "teamid2"
+            }
+        }
+    }
+}

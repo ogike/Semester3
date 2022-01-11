@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tudnivalók - Fun Spotify Stats</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <h1>Tudnivalók - Fun Spotify Stats</h1>
+    <h2>Story</h2>
+    <p>
+        Mindig is szerettem fun statisztikákat nézegetni és csomószor volt olyan, hogy "hú ezt a számot szerintem akkor hallgattam, amikor éppen jöttem haza busszal innen meg onnan". Úgyhogy megnéztem, hogy hogyan tudnám ezt igazolni magamnak. A Spotify listening history (amit telefonon lehet csak megnézni afaik) csak pár hónapig mutatja visszamenőleg. Nekem ennél több kellett, úgyhogy requesteltem a Spotify datámat az elmúlt 1 évből, ezt a GDPR miatt egyszerűen meg lehet csinálni.
+    </p>
+    <p>
+        Érdekes statisztikák vannak benne, de ami most nekem kell, azok a StreamingHistory.json fájlok.
+        Hoppá, pont ilyenekkel foglalkoztunk webprogon, mi lenne ha ctrl+f-ezés helyett írnék rá valami kódot? Úgyhogy elkészítettem ezt az oldalt...
+    </p>
+    <a href="index.php" class="storylink">A főoldal</a>
+
+
+    <h2>Funkciók</h2>
+        <p>Lehet szűrni...</p>
+        <ul>
+            <li>előadóra</li>
+            <li>címre</li>
+            <li>órákra (ezt azért tettem bele, hogy ki tudjam szűrni az olyanokat, hogy "oh ezt akkor hallgattam, amikor késő este jöttem haza...")</li>
+            <li>dátumra (ezt pedig azért, hogy kiszűrjem az olyanokat, hogy "oh ezt nyáron hallgattam")</li>
+        </ul>
+        <p>
+            Az óra és a dátumszűrő is két oldalon zárt intervallum szerint keres.<br>
+            (Amin még lehetne javítani, hogy jelenleg a program úgy kezeli az órákat, hogy a hajnali órák nincsenek az előző nap 22, 23.. órái után. Emiatt ha arra szűrünk, hogy a 23 óra utáni zenéket szeretnénk látni, nem fogjuk látni az éjfél után hallgatott zenéket.)
+        </p>
+        <p>Ki lehet jelölni számokat és/vagy előadókat, hogy látszódjon is, hogy mikor hallgattam pl. a Spotify recapben mutatott 5 számot és 5 előadót.</p>
+            
+        <p>Ami még nagyon izgalmas, az a "hol is voltam" link, ami a Google Timelineod aktuális napjának megfelelő oldalára mutat. (Ha pl az van, hogy "oh, ezt a számot a hévpótlón hallgattam", akkor meg lehessen nézni, hogy akkor tényleg lehettél-e a hévpótlón.)</p>
+        
+        <p>Ezen kívül van benne egy rövid Summary rész, ahol láthatjuk mennyi számot mutat az oldal mennyiből (darab és perc egységekben). Illetve mutatja a listában leggyakoribb előadót, számot, órát.</p>
+
+    <h2>Technikai részletek</h2>
+    <p>
+        Mindig csak annyit dolgoz fel a program, amennyire szükség van. Első betöltésnél csak az első 200 adatot, utána pedig csak a következő 200-at vagy a maradékot (attól függ, melyik gombra kattintunk). Ez ajaxosan/fetchelősen van megcsinálva és másodpercekben mérhető mennyivel hatékonyabb így a "show more" és a "show all" gomb hatékonysága, mint enélkül.
+    </p>
+    <p>
+        Ha változtattunk valamit a szűrőkön, akkor újra kell applyolni őket, mielőtt a "show first 200"-ra vagy a "show all"-ra tudnánk kattintani.
+    </p>
+    <p>
+        Minden dátum és idő az aktuális budapesti idő szerint jelenik meg. (UTC-ről konvertálva.)
+    </p>
+
+    <h2>Használat</h2>
+    
+    <ol>
+        <li>Kérd el az adataidat a Spotifytól. <a href="https://www.spotify.com/us/account/privacy/">Spotify adatvédelmi beállítások</a></li>
+        <li>Kérd el a szükséges fájlokat Robitól. (github link coming soon...or not so soon idk)</li>
+        <li>Ha megkaptad, tedd bele a StreamingHistory.json fileokat abba a mappába ahol a .php és .js fájlok vannak.</li>
+        <li>A fetch.php első pár sorát írd át úgy, hogy azokra a fájlokra hivatkozzon, amiket kaptál. (Talán több van mint 2, talán kevesebb. Ha több, akkor az array_merge függvény megold mindent.)</li>
+        <li>Tedd fel egy php szerverre a mappát, nyisd meg az oldalt böngészőben and have fun browsing the fun stats. :D</li>
+        <li>Tell me if you liked it. <img src="bottom_cat.png" alt="bottom_cat" width="20px" height="20px"></li>
+    </ol>
+
+    <h2>Egyéb</h2>
+    <p>
+        Special thanks to my cool webprog gyakvez, zus for teaching and making me interested in these kinds of stuff. <img src="bottom_cat.png" alt="bottom_cat" width="20px" height="20px">
+    </p>
+    
+</body>
+</html>

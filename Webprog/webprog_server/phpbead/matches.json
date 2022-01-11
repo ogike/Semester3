@@ -1,0 +1,74 @@
+{
+    "matchid1" : {
+        "id" : "matchid1",
+        "home" : {
+            "id" : "teamid1",
+            "score" : "2"
+        },
+        "away" : {
+            "id" : "teamid2",
+            "score" : "1"
+        },
+        "date" : "2021-11-11"
+    },
+    "matchid2" : {
+        "id" : "matchid2",
+        "home" : {
+            "id" : "teamid2",
+            "score" : "3"
+        },
+        "away" : {
+            "id" : "teamid1",
+            "score" : "1"
+        },
+        "date" : "2021-11-15"
+    },
+    "matchid3" : {
+        "id" : "matchid3",
+        "home" : {
+            "id" : "teamid2",
+            "score" : "3"
+        },
+        "away" : {
+            "id" : "teamid1",
+            "score" : "1"
+        },
+        "date" : "2021-11-16"
+    },
+    "matchid4" : {
+        "id" : "matchid4",
+        "home" : {
+            "id" : "teamid2",
+            "score" : "3"
+        },
+        "away" : {
+            "id" : "teamid1",
+            "score" : "1"
+        },
+        "date" : "2021-11-16"
+    },
+    "matchid5" : {
+        "id" : "matchid5",
+        "home" : {
+            "id" : "teamid2",
+            "score" : "90"
+        },
+        "away" : {
+            "id" : "teamid1",
+            "score" : "1"
+        },
+        "date" : "2021-12-16"
+    },
+    "matchid6" : {
+        "id" : "matchid6",
+        "home" : {
+            "id" : "teamid1",
+            "score" : "-1"
+        },
+        "away" : {
+            "id" : "teamid2",
+            "score" : "-1"
+        },
+        "date" : "2021-12-27"
+    }
+}
